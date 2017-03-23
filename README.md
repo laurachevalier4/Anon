@@ -45,9 +45,9 @@ var Answer = new Schema({
 ## Wireframes
 
 ## Site Map
-Login --> Registration, Index
-Registration --> Login
-Index --> Create Question Form
+* Login --> Registration, Index
+* Registration --> Login
+* Index --> Create Question Form
 
 ## User Stories
 1. As a business owner, I can find out the preferences of my target demographic. 
