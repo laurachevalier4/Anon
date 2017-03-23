@@ -58,9 +58,7 @@ var Answer = new Schema({
 7. As a user, I can ask or answer silly questions just because I find them entertaining.
 
 ## Research Topics
-1. (5 points) Authentication
-  I will use a plugin to handle authentication to ensure a more secure website. Possible plugins include irina and mongoose-encryption. These allow developers to encrypt, decrypt, and authenticate information.
-2. (4 points) Visualizations
-  I will use D3 to create visualizations that depict how different demographics have responded to polls. While I have some experience using D3, I want to use this project to experiment and challenge myself with new types of graphs that access the data generated from each poll then show that data in interesting and purposeful ways.
+1. (5 points) Authentication - I will use a plugin to handle authentication to ensure a more secure website. Possible plugins include irina and mongoose-encryption. These allow developers to encrypt, decrypt, and authenticate information.
+2. (4 points) Visualizations - I will use D3 to create visualizations that depict how different demographics have responded to polls. While I have some experience using D3, I want to use this project to experiment and challenge myself with new types of graphs that access the data generated from each poll then show that data in interesting and purposeful ways.
 For a total of 9 points.
 
