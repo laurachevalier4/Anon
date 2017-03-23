@@ -9,7 +9,6 @@ Anon is a website for anonymous polling and in-depth visualizations of results b
 -------------
 
 ```
-// users
 var Schema = mongoose.Schema;
 
 var User = new Schema({
@@ -47,3 +46,21 @@ var Answer = new Schema({
 ```
 
 ## Wireframes
+-------------
+
+## Site Map
+-----------
+Login --> Registration, Index
+Registration --> Login
+Index --> Create Question Form
+
+## User Stories
+---------------
+1. As a business owner, I can find out the preferences of my target demographic. 
+2. As a user, I can inform myself about the interests of the world's widely varying populations.
+3. As a user, I can read through any polls and use the questions as food for thought.
+4. As a user, I can confirm or disprove theories about the opinions and inclinations of particular demographics.
+5. As a user, I can pose questions to the site and use the resulting visualizations to inform or entertain myself and others.
+7. As a user, I can ask or answer silly questions just because I find them entertaining.
+
+
