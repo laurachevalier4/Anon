@@ -13,6 +13,7 @@ var User = new Schema({
   // user id is created by mongoose by default
   username: {type: String, required: true},
   password: {type: String, required: true},
+  email: {type: String, required: true},
   city: {type: String, required: true},
   country: {type: String, required: true},
   gender: {type: String, required: true},
