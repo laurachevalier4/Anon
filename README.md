@@ -1,116 +1,63 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
-
-(___TODO__: your project name_)
-
-# Shoppy Shoperson 
+# Anon
 
 ## Overview
-
-(___TODO__: a brief one or two paragraph, high-level description of your project_)
-
-Remembering what to buy at the grocery store is waaaaay too difficult. Also, shopping for groceries when you're hungry leads to regrettable purchases. Sooo... that's where Shoppy Shoperson comes in!
-
-Shoppy Shoperson is a web app that will allow users to keep track of multiple grocery lists. Users can register and login. Once they're logged in, they can create or view their grocery list. For every list that they have, they can add items to the list or cross off items.
-
+Anon is a website for anonymous polling and in-depth visualizations of results based on user demographics. Users can post questions to the site for other users to vote on, and they will be able to see the results of these polls visualized based on the demographics of voters. Each poll is only valid for a set amount of time, and a user can only post a poll if they have enough points to do so; they can accumulate points by voting on other polls. Not only does this permit open data transactions but it gives all users a glimpse into how certain 'types' of people respond to all sorts of questions. Perhaps we'll find that people fall perfectly into their stereotypes. More likely, we will be surprised to find that people aren't at all what you would expect.
 
 ## Data Model
 
-(___TODO__: a description of your application's data and their relationships to each other_) 
-
-The application will store Users, Lists and Items
-
-* users can have multiple lists (via references)
-* each list can have multiple items (by embedding)
-
-(___TODO__: sample documents_)
-
-An Example User:
-
-```javascript
-{
-  username: "shannonshopper",
-  hash: // a password hash,
-  lists: // an array of references to List documents
-}
 ```
+var Schema = mongoose.Schema;
 
-An Example List with Embedded Items:
+var User = new Schema({
+  // use plugin for authentication and password encryption, e.g. mongoose-encryption
+  // user id is created by mongoose by default
+  username: {type: String, required: true},
+  password: {type: String, required: true},
+  city: {type: String, required: true},
+  country: {type: String, required: true},
+  gender: {type: String, required: true},
+  birth_date: {type: Date, required: true},
+  bio: {type: String, required: false},
+  income: {type: String, required: true},
+  education_level: {type: String, required: true},
+  industry: {type: String, required: true},
+  marital_status: {type: String, required: true},
+  num_points: {type: Number, required: true},
+  questions_answered: [{type: Schema.Types.ObjectId, ref: 'Question'}],
+  questions_asked: [{type: Schema.Types.ObjectId, ref: 'Question'}]
+});
 
-```javascript
-{
-  user: // a reference to a User object
-  name: "Breakfast foods",
-  items: [
-    { name: "pancakes", quantity: "9876", checked: false},
-    { name: "ramen", quantity: "2", checked: true},
-  ],
-  createdAt: // timestamp
-}
+var Question = new Schema({
+  text: {type: String, required: true},
+  answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
+  category: {type: String, required: true},
+  asked_by: {type: Number, ref: 'User'},
+  answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}]
+});
+
+var Answer = new Schema({
+  text: {type: String, required: true},
+  voters: [{type: Schema.Types.ObjectId, ref: 'User'}]
+});
+
 ```
-
-
-## [Link to Commented First Draft Schema](db.js) 
-
-(___TODO__: create a first draft of your Schemas in db.js and link to it_)
 
 ## Wireframes
 
-(___TODO__: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc._)
+## Site Map
+* Login --> Registration, Index
+* Registration --> Login
+* Index --> Create Question Form
 
-/list/create - page for creating a new shopping list
-
-![list create](documentation/list-create.png)
-
-/list - page for showing all shopping lists
-
-![list](documentation/list.png)
-
-/list/slug - page for showing specific shopping list
-
-![list](documentation/list-slug.png)
-
-## Site map
-
-(___TODO__: draw out a site map that shows how pages are related to each other_)
-
-Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/20/Sitemap_google.jpg), but you can create one without the screenshots, drop shadows, etc. ... just names of pages and where they flow to.
-
-## User Stories or Use Cases
-
-(___TODO__: write out how your application will be used through [user stories](http://en.wikipedia.org/wiki/User_story#Format) and / or [use cases](https://www.mongodb.com/download-center?jmp=docs&_ga=1.47552679.1838903181.1489282706#previous)_)
-
-1. as non-registered user, I can register a new account with the site
-2. as a user, I can log in to the site
-3. as a user, I can create a new grocery list
-4. as a user, I can view all of the grocery lists I've created in a single list
-5. as a user, I can add items to an existing grocery list
-6. as a user, I can cross off items in an existing grocery list
+## User Stories
+1. As a business owner, I can find out the preferences of my target demographic. 
+2. As a user, I can inform myself about the interests of the world's widely varying populations.
+3. As a user, I can read through any polls and use the questions as food for thought.
+4. As a user, I can confirm or disprove theories about the opinions and inclinations of particular demographics.
+5. As a user, I can pose questions to the site and use the resulting visualizations to inform or entertain myself and others.
+7. As a user, I can ask or answer silly questions just because I find them entertaining.
 
 ## Research Topics
-
-(___TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed_)
-
-* (5 points) Integrate user authentication
-    * I'm going to be using passport for user authentication
-    * And account has been made for testing; I'll email you the password
-    * see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
-    * see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
-* (4 points) Perform client side form validation using a JavaScript library
-    * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-    * if you put in a number that's greater than 5, an error message will appear in the dom
-* (5 points) vue.js
-    * used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
-
-10 points total out of 8 required points (___TODO__: addtional points will __not__ count for extra credit_)
-
-
-## [Link to Initial Main Project File](app.js) 
-
-(___TODO__: create a skeleton Express application with a package.json, app.js, views folder, etc. ... and link to your initial app.js_)
-
-## Annotations / References Used
-
-(___TODO__: list any tutorials/references/etc. that you've based your code off of_)
-
-1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
-2. [tutorial on vue.js](https://vuejs.org/v2/guide/) - (add link to source code that was based on this)
+1. (5 points) Authentication - I will implement authentication by creating middleware that stores user information in cookies. This will coincide with session management. I will likely use Mozilla's client-sessions, which is "connect middleware that implements sessions in encrypted tamper-free cookies" [from their docs](https://github.com/mozilla/node-client-sessions#usage). User sign-up and registration will be enabled by this authentication and database storage.
+2. (4 points) Visualizations - I will use D3 to create visualizations that depict how different demographics have responded to polls. While I have some experience using D3, I want to use this project to experiment and challenge myself with new types of graphs that access the data generated from each poll then show that data in interesting and purposeful ways.
+For a total of 9 points.
