@@ -53,8 +53,10 @@ An example Answer
 ```
 
 ## Wireframes
+/ask
 ![/answer](/documentation/ask.jpg)
 
+/answer
 ![/ask](/documentation/answer.jpg)
 
 ## Site Map
