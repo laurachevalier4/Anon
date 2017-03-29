@@ -4,6 +4,7 @@
 Anon is a website for anonymous polling and in-depth visualizations of results based on user demographics. Users can post questions to the site for other users to vote on, and they will be able to see the results of these polls visualized based on the demographics of voters. Each poll is only valid for a set amount of time, and a user can only post a poll if they have enough points to do so; they can accumulate points by voting on other polls. Not only does this permit open data transactions but it gives all users a glimpse into how certain 'types' of people respond to all sorts of questions. Perhaps we'll find that people fall perfectly into their stereotypes. More likely, we will be surprised to find that people aren't at all what you would expect.
 
 ## Data Model
+[link to the schema](/db.js)
 
 The application will store users, questions, and answers.
 Users can have many questions (they can ask and answer questions) -- to be included as references.
@@ -11,7 +12,6 @@ Questions can have many users (they can be answered by many users), but they can
 Each question can have many answers and each answer has one question -- each question has a reference to its answers and each answer has a reference to the question so they can be queried in either direction.
 
 ### Sample Documents
-[link to the schema](/db.js)
 
 An example User
 ```
@@ -53,6 +53,9 @@ An example Answer
 ```
 
 ## Wireframes
+![/answer](/documentation/ask.pdf)
+
+![/ask](/documentation/answer.pdf)
 
 ## Site Map
 * Login --> Registration, Index
@@ -69,5 +72,5 @@ An example Answer
 
 ## Research Topics
 1. (5 points) Authentication - I will implement authentication by creating middleware that stores user information in cookies. This will coincide with session management. I will likely use Mozilla's client-sessions, which is "connect middleware that implements sessions in encrypted tamper-free cookies" [from their docs](https://github.com/mozilla/node-client-sessions#usage). User sign-up and registration will be enabled by this authentication and database storage.
-2. (4 points) Visualizations - I will use D3 to create visualizations that depict how different demographics have responded to polls. While I have some experience using D3, I want to use this project to experiment and challenge myself with new types of graphs that access the data generated from each poll then show that data in interesting and purposeful ways.
+2. (4 points) Visualizations - I will use D3 to create visualizations that depict how different demographics have responded to polls. While I have some experience using D3, I want to use this project to experiment and challenge myself with new types of graphs that access the data generated from each poll then show that data in interesting and purposeful ways. I might incorporate higher-level libraries for D3 such as D3Plus.
 For a total of 9 points.
