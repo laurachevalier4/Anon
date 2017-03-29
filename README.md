@@ -6,11 +6,13 @@ Anon is a website for anonymous polling and in-depth visualizations of results b
 ## Data Model
 
 The application will store users, questions, and answers.
-Users can have many questions (they can ask and answer questions) -- to be included as references
-Questions can have many users (they can be answered by many users), but they can only have one asker -- to be included as references
-Each question can have many answers (embedded), and each answer has one question
+Users can have many questions (they can ask and answer questions) -- to be included as references.
+Questions can have many users (they can be answered by many users), but they can only have one asker -- to be included as references.
+Each question can have many answers and each answer has one question -- each question has a reference to its answers and each answer has a reference to the question so they can be queried in either direction.
 
 ### Sample Documents
+link to the schema ('../db.js')
+
 An example User
 ```
 {
