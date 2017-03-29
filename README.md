@@ -17,7 +17,7 @@ An example User
 ```
 {
   username: "luruchevie",
-  password: // a hashed password
+  password: // a hashed password,
   email: "notmyrealemail@nyu.edu",
   city: "New York",
   country: "USA",
