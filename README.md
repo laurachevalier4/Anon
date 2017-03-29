@@ -80,3 +80,5 @@ An example Answer
 1. (5 points) Authentication - I will implement authentication by creating middleware that stores user information in cookies. This will coincide with session management. I will likely use Mozilla's client-sessions, which is "connect middleware that implements sessions in encrypted tamper-free cookies" [from their docs](https://github.com/mozilla/node-client-sessions#usage). User sign-up and registration will be enabled by this authentication and database storage.
 2. (4 points) Visualizations - I will use D3 to create visualizations that depict how different demographics have responded to polls. While I have some experience using D3, I want to use this project to experiment and challenge myself with new types of graphs that access the data generated from each poll then show that data in interesting and purposeful ways. I might incorporate higher-level libraries for D3 such as D3Plus.
 For a total of 9 points.
+
+## [Link to initial project file](/app.js)
