@@ -53,9 +53,9 @@ An example Answer
 ```
 
 ## Wireframes
-![/answer](/documentation/ask.pdf)
+![/answer](/documentation/ask.jpg)
 
-![/ask](/documentation/answer.pdf)
+![/ask](/documentation/answer.jpg)
 
 ## Site Map
 * Login --> Registration, Index
