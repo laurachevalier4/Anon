@@ -5,42 +5,49 @@ Anon is a website for anonymous polling and in-depth visualizations of results b
 
 ## Data Model
 
+The application will store users, questions, and answers.
+Users can have many questions (they can ask and answer questions) -- to be included as references
+Questions can have many users (they can be answered by many users), but they can only have one asker -- to be included as references
+Each question can have many answers (embedded), and each answer has one question
+
+### Sample Documents
+An example User
 ```
-var Schema = mongoose.Schema;
-
-var User = new Schema({
-  // use plugin for authentication and password encryption, e.g. mongoose-encryption
-  // user id is created by mongoose by default
-  username: {type: String, required: true},
-  password: {type: String, required: true},
-  email: {type: String, required: true},
-  city: {type: String, required: true},
-  country: {type: String, required: true},
-  gender: {type: String, required: true},
-  birth_date: {type: Date, required: true},
-  bio: {type: String, required: false},
-  income: {type: String, required: true},
-  education_level: {type: String, required: true},
-  industry: {type: String, required: true},
-  marital_status: {type: String, required: true},
-  num_points: {type: Number, required: true},
-  questions_answered: [{type: Schema.Types.ObjectId, ref: 'Question'}],
-  questions_asked: [{type: Schema.Types.ObjectId, ref: 'Question'}]
-});
-
-var Question = new Schema({
-  text: {type: String, required: true},
-  answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
-  category: {type: String, required: true},
-  asked_by: {type: Number, ref: 'User'},
-  answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}]
-});
-
-var Answer = new Schema({
-  text: {type: String, required: true},
-  voters: [{type: Schema.Types.ObjectId, ref: 'User'}]
-});
-
+{
+  username: "luruchevie",
+  password: // a hashed password
+  email: "notmyrealemail@nyu.edu",
+  city: "New York",
+  country: "USA",
+  gender: "F",
+  birth_date: "1996-09-11",
+  bio: "",
+  income: "Would rather not say...",
+  education_level: "Some college",
+  industry: "student",
+  marital_status: "single",
+  num_points: 42,
+  answers: [{/* list of references to answers given */}],
+  questions: [{/* list of references to questions asked */}]
+}
+```
+An example Question
+```
+{
+  text: "How are you doing today?",
+  category: "Friendly",
+  asked_by: /* some user's id */,
+  answered_by: [/* list of references to users */],
+  answers: [/* list of references to answers */]
+}
+```
+An example Answer
+```
+{
+  question: /* some question's id */,
+  text: "I'm doing fabulously today!",
+  voters: [/* list of references to users */]
+}
 ```
 
 ## Wireframes

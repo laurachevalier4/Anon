@@ -17,19 +17,20 @@ var User = new Schema({
   industry: {type: String, required: true},
   marital_status: {type: String, required: true},
   num_points: {type: Number, required: true},
-  questions_answered: [{type: Schema.Types.ObjectId, ref: 'Question'}],
-  questions_asked: [{type: Schema.Types.ObjectId, ref: 'Question'}]
+  answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
+  questions: [{type: Schema.Types.ObjectId, ref: 'Question'}]
 });
 
 var Question = new Schema({
   text: {type: String, required: true},
-  answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
   category: {type: String, required: true},
-  asked_by: {type: Number, ref: 'User'},
-  answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}]
+  asked_by: {type: Schema.Type.ObjectId, ref: 'User'},
+  answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}]
 });
 
 var Answer = new Schema({
+  question: {type: Schema.Types.ObjectId, ref: 'Question'}, // so we can get the question given the answer and not just the other way around
   text: {type: String, required: true},
   voters: [{type: Schema.Types.ObjectId, ref: 'User'}]
 });
