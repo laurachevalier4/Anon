@@ -54,10 +54,14 @@ An example Answer
 
 ## Wireframes
 /ask
-![/answer](/documentation/ask.jpg)
 
-/answer
-![/ask](/documentation/answer.jpg)
+![ask](/documentation/ask.jpg)
+
+
+/
+(index)
+
+![/](/documentation/answer.jpg)
 
 ## Site Map
 * Login --> Registration, Index
