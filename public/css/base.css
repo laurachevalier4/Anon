@@ -69,16 +69,17 @@ li {
   font-weight: normal;
 }
 
-.message p {
+.message p, p.message {
   color: #000;
   text-align: center;
+  margin: auto;
   margin-top: 1em;
   background: rgba(255, 255, 255, .6);
   padding: .5em;
-  margin-right: 2em;
   margin-bottom: 2em;
   font-family: 'Prata', serif;
   font-size: 1.1em;
+  width: 50%;
 }
 
 h1 {
