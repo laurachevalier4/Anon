@@ -49,7 +49,15 @@ app.get('/', function(req, res) {
   }
 });
 
-app.get('/login', function(req, res) {
+app.get('/ask', function(req, res) {
+	res.render('ask');
+});
+
+app.post('/ask', function(req, res) {
+	res.redirect('/', 300);
+});
+
+/*app.get('/login', function(req, res) {
 	res.render('login');
 });
 
@@ -80,7 +88,7 @@ app.post('/register', function(req, res) {
 
 app.get('/activation', function(req, res) {
 	res.render('activation');
-});
+});*/
 
 app.listen(3000);
 
