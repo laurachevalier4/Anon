@@ -1,0 +1,32 @@
+{{#if latestSurveyList}}
+    <ul style="margin-top: 2em;">
+    {{#each latestSurveyList as |survey|}}
+      {{#each survey.questions as |question|}}
+      <div class="question-detail">
+        {{> detail}}
+      </div>
+      {{/each}}
+      <br>
+    {{/each}}
+    </ul>
+{{#else}}
+    <p>No polls are available.</p>
+{{/if}}
+</div>
+
+<!-- Shouldn't need to reload jquery here... loaded in base.html -->
+<script src="/js/jquery.min.js"></script>
+<script>
+/*$(document).ready(function () {
+  var question_id = "{{ view.question_id }}";
+  var error_msg="{{ error_message }}";
+  if (error_msg) { // jump to correct question when user gives no answer
+    question_id = "{{ question_id }}";
+  }
+  if (!isNaN(question_id) && question_id) {
+    var position = $('#' + question_id).position().top;
+    $(document).scrollTop(position-100);
+  }
+});*/
+</script>
+{% endblock %}

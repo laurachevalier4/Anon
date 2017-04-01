@@ -24,7 +24,7 @@ var User = new Schema({
 var Question = new Schema({
   text: {type: String, required: true},
   category: {type: String, required: true},
-  asked_by: {type: Schema.Type.ObjectId, ref: 'User'},
+  asked_by: {type: Schema.Types.ObjectId, ref: 'User'},
   answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}],
   answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}]
 });
