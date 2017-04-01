@@ -92,6 +92,22 @@ hr {
 
 .question-form * {
   font-family: 'Prata', serif;
+  font-size: .9em;
+}
+
+.question-form input[type="submit"] {
+  height: 5em;
+  width: 100%;
+  padding: .5em;
+  outline: 0;
+  color: white;
+  border: none;
+  background-color: #556;
+}
+
+.question-form input[type="submit"]:hover {
+  cursor: pointer;
+  opacity: .8;
 }
 
 #question-label {
