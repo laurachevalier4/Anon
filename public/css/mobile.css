@@ -1,0 +1,80 @@
+@import './base.css';
+@import './style.css';
+
+.body {
+  width: 90%;
+  margin: auto;
+  margin-top: 3em;
+}
+
+.question-text {
+  font-size: 2em;
+  color: #552255;
+  clear: both;
+}
+
+.question-detail, .results {
+  background: rgba(255, 255, 255, .6);
+  padding: 1em;
+  margin-right: 2em;
+  font-family: 'Dosis', sans-serif;
+  font-size: 1.1em;
+  margin-bottom: 3em;
+}
+
+form, .results {
+  width: 100%;
+}
+
+#container {
+  width: 100%;
+  padding-top: 60px; /* push image down below nav bar */
+}
+
+#navigation {
+  position: fixed;
+  margin: auto;
+  top: 0;
+  left: 0;
+  height: 120px;
+  background: rgba(255, 255, 255, .8);
+  width: 100%;
+}
+
+#navigation li {
+  /*border-top: solid black 1px;*/
+}
+
+ul {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+li {
+  clear: both;
+  padding: .1em;
+  font-family: Raleway, Helvetica, sans-serif;
+  font-size: 1.3em;
+  line-height: 1.5em;
+  font-weight: normal;
+}
+
+.vote-form {
+  height: 6em;
+}
+
+input.btn-vote {
+  background: rgba(255, 255, 255, .6);
+  font-family: 'Dosis', sans-serif;
+  font-size: 1.1em;
+}
+
+.results ul {
+  margin-top: 10em;
+}
+
+/******* OVERWRITE LOGIN STYLES *******/
+.login-form {
+  margin: auto;
+}
