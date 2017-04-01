@@ -80,3 +80,10 @@ hr {
   display: block;
   width: 90%;
 }
+
+/* STYLES FOR /ASK */
+.question-form {
+  background: rgba(255, 255, 255, .6);
+  width: 60%;
+  margin: auto;
+}

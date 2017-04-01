@@ -5,10 +5,37 @@
 		<meta name="viewport" content="width=device-width">
 		<title>Anon</title>
 		<link rel="stylesheet" href="/css/base.css">
+
+		<link rel="stylesheet" media="only screen and (max-width: 600px)" href="/css/mobile.css">
+
+		<link rel="stylesheet" media="only screen and (min-width: 601px) and (max-width: 960px)" href="/css/tablet.css">
+
+		<link rel="stylesheet" type="text/css" media="only screen and (min-width: 961px)" href="css/style.css"/>
+
+		<link href="https://fonts.googleapis.com/css?family=Old+Standard+TT|Prata" rel="stylesheet">
 	</head>
 	<body>
+		<div id="container">
+	        <div id="navigation">
+	          	<ul class="nav-list-all">
+	            	<li class="nav-list" id="brand-title"><a href="/index">Anon</a></li>
+	            	<li class="nav-list"><a href="/">Home</a></li>
+	            	<li class="nav-list"><a href="/login">Login</a></li>
+	            	<li class="nav-list"><a href="#">Ask</a></li>
+	            <!-- {% if user.is_authenticated %}
+	            	<li class="nav-list"><a href="/index">Account</a></li>
+	            	 {% endif %} -->
+	          	</ul>
+	        </div> <!-- close #navigation -->
+	     </div> <!-- close #container -->
+
+	    <!-- Core Scripts - Include with every page -->
+	    <script src="/js/jquery.min.js"></script>
+	    <script src="/js/bootstrap.min.js"></script>
+	    <script src="/js/custom.js"></script>
 		<div class="body">
 			{{{ body }}}
 		</div>
+	<!--<a href="http://www.freepik.com/free-vector/sphere-network-background_719716.htm" id="credit">Designed by Freepik</a>-->
 	</body>
 </html>
