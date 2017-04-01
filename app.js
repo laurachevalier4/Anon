@@ -28,7 +28,7 @@ hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 
 app.get('/', function(req, res) {
-  if (req.session && req.session.user) { // Check if session exists
+  /*if (req.session && req.session.user) { // Check if session exists
     // lookup the user in the DB by pulling their email from the session
     User.findOne({ username: req.session.user.username }, function (err, user) {
       if (!user) {
@@ -38,15 +38,15 @@ app.get('/', function(req, res) {
         res.redirect('/login');
       } else {
         // expose the user to the template by using res.locals
-        res.locals.user = user;
+        res.locals.user = user;*/
  
         // render the dashboard page
         res.render('index');
-      }
+      /*}
     });
   } else {
     res.redirect('/login');
-  }
+  }*/
 });
 
 app.get('/ask', function(req, res) {
