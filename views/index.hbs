@@ -1,7 +1,7 @@
-{{#if latestSurveyList}}
+{{#if polls}}
     <ul style="margin-top: 2em;">
-    {{#each latestSurveyList as |survey|}}
-      {{#each survey.questions as |question|}}
+    {{#each polls as |poll|}}
+      {{#each poll.questions as |question|}}
       <div class="question-detail">
         {{> detail}}
       </div>

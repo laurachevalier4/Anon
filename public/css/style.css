@@ -40,6 +40,7 @@ body {
   margin: auto;
   font-family: 'Prata', serif;
   font-size: 1em;
+  background: rgba(255, 255, 255, .6);
 }
 
 input.btn-vote {
@@ -48,15 +49,6 @@ input.btn-vote {
   margin: auto;
   font-family: 'Prata', serif;
   font-size: 1em;
-}
-
-.question-detail {
-  background: rgba(255, 255, 255, .6);
-}
-
-.results {
-  padding: 1em;
-  background: rgba(255, 255, 255, .6);
 }
 
 .results, .results ul li {

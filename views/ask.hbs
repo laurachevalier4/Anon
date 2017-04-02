@@ -1,6 +1,19 @@
-<form class="question-form" method="POST" action="ask">
+<form class="question-form" method="POST" action="/ask">
 	<label id="question-label" for="question">What do you want to ask?</label>
 	<input type="text" id="question" name="question" placeholder="Your question here (e.g. What is your favorite color?)">
+	<label for="category">Category:</label>
+	<select name="category">
+		<option value="fr">Friendly</option>
+		<option value="ed">Education</option>
+		<option value="en">Entertainment</option>
+		<option value="na">Nature</option>
+		<option value="ps">Products and Services</option>
+		<option value="re">Relationships</option>
+		<option value="sc">Science</option>
+		<option value="te">Tech</option>
+		<option value="tr">Travel</option>
+		<option value="ot">Other</option>
+	</select>
 	<input type="text" name="choice1" placeholder="Choice 1">
 	<input type="text" name="choice2" placeholder="Choice 2">
 	<!-- Figure out how to dynamically add choices on click event -->

@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Question = mongoose.model('Question');
 const Answer = mongoose.model('Answer');
+const ObjectId = mongoose.Types.ObjectId;
 
 const app = express();
 
@@ -41,7 +42,14 @@ app.get('/', function(req, res) {
         res.locals.user = user;*/
  
         // render the dashboard page
-        res.render('index');
+        Question.find({}, (err, polls) => {
+        	if (err) {
+        		console.log(err);
+        	} else {
+        		console.log(polls);
+        		res.render('index', {polls: polls});
+        	}
+        });
       /*}
     });
   } else {
@@ -54,7 +62,29 @@ app.get('/ask', function(req, res) {
 });
 
 app.post('/ask', function(req, res) {
-	res.redirect('/', 300);
+	let id = new ObjectId;
+	const choices = [];
+	for (let key in req.body) {
+		if (key.substring(0, 6) === "choice") {
+			let answer = new Answer({
+				question: id, 
+				text: req.body[key],
+				voters: []
+			});
+			choices.push(answer._id);
+			answer.save();
+		}
+	}
+	let question = new Question({
+		_id: id, // use ObjectId to generate new id
+		text: req.body.question,
+		category: req.body.category, 
+		asked_by: new ObjectId, // placeholder until I have session management
+		answered_by: [],
+		answers: choices
+	});
+	question.save();
+	res.redirect(302, '/');
 });
 
 /*app.get('/login', function(req, res) {

@@ -18,21 +18,25 @@ var User = new Schema({
   marital_status: {type: String, required: true},
   num_points: {type: Number, required: true},
   answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
-  questions: [{type: Schema.Types.ObjectId, ref: 'Question'}]
+  questions: [{type: Schema.Types.ObjectId, ref: 'Question'}],
+  created: { type: Date, default: Date.now }
 });
 
 var Question = new Schema({
+  _id: {type: Schema.Types.ObjectId},
   text: {type: String, required: true},
   category: {type: String, required: true},
   asked_by: {type: Schema.Types.ObjectId, ref: 'User'},
   answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}],
-  answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}]
+  answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
+  created: { type: Date, default: Date.now }
 });
 
 var Answer = new Schema({
   question: {type: Schema.Types.ObjectId, ref: 'Question'}, // so we can get the question given the answer and not just the other way around
   text: {type: String, required: true},
-  voters: [{type: Schema.Types.ObjectId, ref: 'User'}]
+  voters: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  created: { type: Date, default: Date.now }
 });
 
 // for future completion (or if I have time): include Comments
