@@ -83,8 +83,15 @@ app.post('/ask', function(req, res) {
 		answered_by: [],
 		answers: choices
 	});
-	question.save();
-	res.redirect(302, '/');
+	question.save(function(err) {
+    if (err) {
+      console.log(err);
+      res.redirect(302, '/');
+    }
+    else {
+      res.redirect(302, '/');
+    }
+  });
 });
 
 /*app.get('/login', function(req, res) {
