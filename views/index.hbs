@@ -1,11 +1,24 @@
 {{#if polls}}
     <ul style="margin-top: 2em;">
     {{#each polls as |poll|}}
-      {{#each poll.questions as |question|}}
+    <!-- Need to add check of whether or not the user has answered this question -->
       <div class="question-detail">
-        {{> detail}}
+        <div class="question-text">
+          {{ poll.text }}
+        </div>
+        <form class="vote-form" action="/vote" method="POST">
+          <div class="options">
+            {{#each poll.answers as |answer|}}
+            <input type="radio" name="choice" id="{{answer._id}}" value="{{answer._id}}" />
+            <label for="{{answer._id}}"> &nbsp;{{answer.text}}</label><br>
+            {{/each}}
+          </div>
+          <div class="submit-button-container">
+            <input class="btn-vote submit-button" type="submit" value="Vote"/>
+          </div>
+          <!-- User should only be able to submit if they've been authenticated -->
+        </form>
       </div>
-      {{/each}}
       <br>
     {{/each}}
     </ul>

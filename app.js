@@ -45,8 +45,17 @@ app.get('/', function(req, res) {
         Question.find({}, (err, polls) => {
         	if (err) {
         		console.log(err);
-        	} else {
-        		console.log(polls);
+        	} else {/*
+            console.log("\npolls: \n", polls);
+            polls.forEach(function(poll) {
+              console.log(poll);
+              poll.answers.forEach(function(answer) {
+                console.log(answer);
+                Answer.find({'_id': answer}, (err, ans) => {
+                  console.log(ans);
+                });
+              })
+            });*/
         		res.render('index', {polls: polls});
         	}
         });
@@ -71,7 +80,7 @@ app.post('/ask', function(req, res) {
 				text: req.body[key],
 				voters: []
 			});
-			choices.push(answer._id);
+			choices.push(answer);
 			answer.save();
 		}
 	}
@@ -89,6 +98,30 @@ app.post('/ask', function(req, res) {
       res.redirect(302, '/');
     }
     else {
+      res.redirect(302, '/');
+    }
+  });
+});
+
+app.post('/vote', function(req, res) {
+  console.log(req.body);
+  // also get user id from session
+  Answer.find({'_id': req.body.choice}, function(err, answer) {
+    if (err) {
+      console.log(err);
+      res.redirect(302, '/');
+    } else {
+      console.log(answer);
+      //answer.voters.push(req.session.user);
+      /*answer.save(function(err) {
+        if (err) {
+          console.log(err);
+          res.redirect(302, '/');
+        } else {
+          res.redirect(302, '/');
+        }
+      });
+      */
       res.redirect(302, '/');
     }
   });

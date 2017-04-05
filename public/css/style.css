@@ -1,4 +1,5 @@
 body {
+  color: #333;
   margin: auto;
   margin-top: 3em;
   width: 60%;
@@ -10,29 +11,44 @@ body {
   color: #333;
   clear: both;
   font-family: 'Old Standard TT', serif;
-
+  margin-top: .5em;
 }
 
+/* VOTE FORM STYLES */
+
 .vote-form {
+  width: 80%;
   margin: auto;
-  width: 100%;
+}
+
+.vote-form input[type=radio]:hover {
+  cursor: pointer;
 }
 
 .options {
   width: 100%;
   background: rgba(255, 255, 255, .7);
-  float: left;
   padding: 1em;
   margin-bottom: .5em;
+  margin-top: .5em;
 }
 
 .submit-button {
+  background: rgba(255, 255, 255, .7);
+  color: #333;
   clear: both;
   width: 15%;
   text-align: center;
-  margin-top: 1em;
+  margin-top: .5em;
   border: 1px solid #ddd;
-  font-size: .5em;
+  padding: .5em;
+  font-family: 'Prata', serif;
+  font-size: 1em;
+}
+
+.submit-button:hover {
+  background: rgba(255, 255, 255, .4);
+  cursor: pointer;
 }
 
 .question-detail, .results {
@@ -40,16 +56,10 @@ body {
   margin: auto;
   font-family: 'Prata', serif;
   font-size: 1em;
-  background: rgba(255, 255, 255, .6);
+  background: rgba(255, 255, 255, .5);
 }
 
-input.btn-vote {
-  background: rgba(255, 255, 255, .6);
-  padding: .5em;
-  margin: auto;
-  font-family: 'Prata', serif;
-  font-size: 1em;
-}
+/* END VOTE FORM STYLING */
 
 .results, .results ul li {
   font-size: 1em;
