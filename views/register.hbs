@@ -1,0 +1,69 @@
+<div class="login-form">
+    <h1>Register</h1>
+    {{#if error}}
+        <p class="error">{{ error }}</p>
+        <p>Want to go <a href="/">home</a>?</p>
+    {{/if}}
+    <form method="POST" action="/register">
+        Username:&nbsp; <input type="text" name="username" placeholder="Username" required><br>
+        Email:&nbsp; <input type="email" name="email" placeholder="Email" required><br>
+        Password:&nbsp; <input type="password" name="password" placeholder="Password" required><br>
+        <p>In order to produce the awesome visualizations that make it easier for you to understand how people are answering, we ask that you give us some <b>additional information...</b> <br>Annoying, but WORTH IT.</p>
+        <!--City:&nbsp; <input type="text" name="city" placeholder="City" required>
+        Country:&nbsp; <input type="text" name="country" placeholder="Country" required>-->
+        <!-- Will need to validate that these are real and that they correspond with one another -->
+        Gender:&nbsp; <select name="gender" required>
+            <option value="F">Female</option>
+            <option value="M">Male</option>
+            <option value="N">Non-binary</option>
+        </select><br><br>
+        Birth Date: &nbsp;<input type="text" name="birthday" placeholder="dd/mm/yyyy" required></input>
+        <!--Bio: &nbsp;<input type="text" name="bio" placeholder="Bio">
+        Household income: &nbsp;<select name="income" required>
+            <option value="lowest">< 20,000</option>
+            <option value="lower"><50,000</option>
+            <option value="middle"><80,000</option>
+            <option value="higher"><120,000</option>
+            <option value="highest">>120,000</option>
+        </select><br><br>
+        Education Level:&nbsp; <select name="education" required>
+            <option value="no">None</option>
+            <option value="pri">Primary</option>
+            <option value="shs">Some high school, no diploma</option>
+            <option value="hs">High school diploma or equivalent</option>
+            <option value="sco">Some college</option>
+            <option value="ass">Associate</option>
+            <option value="bac">Bachelor's</option>
+            <option value="mas">Master's</option>
+            <option value="phd">PhD</option>
+            <option value="md">Doctorate</option>
+            <option value="o">Other</option>
+        </select><br><br>
+        <p><b>Almost there...</b></p>
+        Industry:&nbsp; <select name="industry" required>
+            <option value="art">Arts, Culture & Design</option>
+            <option value="bus">Business, Management & Startups</option>
+            <option value="com">Communications</option>
+            <option value="edu">Education & Teaching</option>
+            <option value="tec">Engineering & Information Technology</option>
+            <option value="fin">Finance, Real Estate & Insurance</option>
+            <option value="gov">Government, Law, Policy & Politics</option>
+            <option value="med">Health Care</option>
+            <option value="sci">Mathematics, Life & Physical Sciences</option>
+            <option value="soc">Nonprofit & Social Services</option>
+            <option value="stu">Student</option>
+            <option value="o">Other</option>
+        </select><br><br>
+        Marital status: &nbsp;<select name="marital" required>
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="divorced">Divorced</option>
+            <option value="widowed">Widowed</option>
+            <option value="separated">Separated</option>
+        </select><br><br>-->
+
+        <p>You made it!</p>
+        <input type="submit" value="Register" class="submit-button">
+    </form>
+    <p>Already registered? Login <a href="/login">here</a>.</p>
+</div>

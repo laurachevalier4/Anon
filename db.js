@@ -4,18 +4,19 @@ var Schema = mongoose.Schema;
 var User = new Schema({
   // use plugin for authentication and password encryption, e.g. mongoose-encryption
   // user id is created by mongoose by default
+  // Add maxlengths and minlengths!!
   username: {type: String, required: true},
   password: {type: String, required: true},
   email: {type: String, required: true},
-  city: {type: String, required: true},
-  country: {type: String, required: true},
+  /*city: {type: String, required: true},
+  country: {type: String, required: true},*/
   gender: {type: String, required: true},
   birth_date: {type: Date, required: true},
-  bio: {type: String, required: false},
+  /*bio: {type: String, required: false},
   income: {type: String, required: true},
   education_level: {type: String, required: true},
   industry: {type: String, required: true},
-  marital_status: {type: String, required: true},
+  marital_status: {type: String, required: true},*/
   num_points: {type: Number, required: true},
   answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
   questions: [{type: Schema.Types.ObjectId, ref: 'Question'}],

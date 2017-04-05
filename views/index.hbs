@@ -18,6 +18,9 @@
           </div>
           <!-- User should only be able to submit if they've been authenticated -->
         </form>
+        <div class="question-info">
+          <p>Asked on {{ dateFormat poll.created "MMM d, YYYY"}}</p>
+        </div>
       </div>
       <br>
     {{/each}}

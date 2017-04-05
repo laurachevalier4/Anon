@@ -59,11 +59,17 @@ body {
   margin: auto;
   font-family: 'Prata', serif;
   font-size: 1em;
-  background: rgba(255, 255, 255, .6);
+  background: rgba(255, 255, 255, .7);
 }
 
 .question-detail {
   border: 2px solid white;
+  background: rgba(255, 255, 255, .8);
+}
+
+.question-info {
+  text-align: right;
+  font-size: .75em;
 }
 
 .results, .results ul li {
@@ -90,10 +96,10 @@ hr {
 
 /* STYLES FOR /ASK */
 .question-form {
-  background: rgba(255, 255, 255, .6);
+  background: rgba(255, 255, 255, .7);
   width: 60%;
   margin: auto;
-  margin-top: 15%;
+  margin-top: 10%;
   padding: 1em;
   border: 3px solid white;
 }

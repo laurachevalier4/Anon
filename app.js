@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const session = require('client-sessions');
+const session = require('express-session');
 const db = require('./db');
 const hbs = require('hbs');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
@@ -18,15 +20,16 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, "public")));
 app.set('views', path.join(__dirname, "views"));
 
-app.use(session({
-  cookieName: 'session',
-  secret: 'random_string_goes_here', // generate a random string with plugin like uuid
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000, // extend life for 5 minutes
-}));
+const sessionOptions = {
+  secret: 'd28ef806c691f4ed9752e03808423ed5c269d62964e9793cbc26239063a6db22498ad782ea97ab8c141d0670fc297961be52dad808e5581a96345582d016115a',
+  resave: true,
+  saveUninitialized: true
+};
+app.use(session(sessionOptions));
 
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
+hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 app.get('/', function(req, res) {
   /*if (req.session && req.session.user) { // Check if session exists
@@ -127,8 +130,12 @@ app.post('/vote', function(req, res) {
   });
 });
 
-/*app.get('/login', function(req, res) {
+app.get('/login', function(req, res) {
 	res.render('login');
+});
+
+app.get('/register', function(req, res) {
+  res.render('register');
 });
 
 app.post('/login', function(req, res) {
@@ -136,14 +143,14 @@ app.post('/login', function(req, res) {
     if (!user) {
       res.render('login', { error: 'Invalid email or password.' });
     } else {
-      if (req.body.password === user.password) {
-        // sets a cookie with the user's info
-        // client-sessions takes care of encrypting user info
-        req.session.user = user;
-        res.redirect('/');
-      } else {
-        res.render('login', { error: 'Invalid email or password.' });
-      }
+      bcrypt.compare(req.body.password, user.password, function(err, result) {
+        if (result) {
+          req.session.user = user;
+          res.redirect('/');
+        } else {
+          res.render('login', { error: 'Invalid email or password.' });
+        }
+      });
     }
   });
 });
@@ -156,9 +163,9 @@ app.post('/register', function(req, res) {
 	res.redirect('activation', 300);
 });
 
-app.get('/activation', function(req, res) {
-	res.render('activation');
-});*/
+// app.get('/activation', function(req, res) {
+// 	res.render('activation');
+// });
 
 app.listen(3000);
 
