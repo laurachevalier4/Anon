@@ -20,7 +20,11 @@
 	          	<ul class="nav-list-all">
 	            	<li class="nav-list" id="brand-title"><a href="/">Anon</a></li>
 	            	<li class="nav-list"><a href="/">Home</a></li>
+	            	{{#if user}}
+	            	<li class="nav-list"><a href="/logout">Logout</a></li>
+	            	{{else}}
 	            	<li class="nav-list"><a href="/login">Login</a></li>
+	            	{{/if}}
 	            	<li class="nav-list"><a href="/ask">Ask</a></li>
 	            <!-- {% if user.is_authenticated %}
 	            	<li class="nav-list"><a href="/index">Account</a></li>

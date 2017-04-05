@@ -23,16 +23,24 @@ app.set('views', path.join(__dirname, "views"));
 const sessionOptions = {
   secret: 'd28ef806c691f4ed9752e03808423ed5c269d62964e9793cbc26239063a6db22498ad782ea97ab8c141d0670fc297961be52dad808e5581a96345582d016115a',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { path: '/', httpOnly: true, secure: false, maxAge: null } // default
 };
 app.use(session(sessionOptions));
+
+app.use(function(req, res, next) {
+  const hour = 3600000;
+  req.session.cookie.expires = new Date(Date.now() + hour);
+  req.session.cookie.maxAge = hour;
+  next();
+});
 
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 app.get('/', function(req, res) {
-  /*if (req.session && req.session.user) { // Check if session exists
+  if (req.session && req.session.user) { // Check if session exists
     // lookup the user in the DB by pulling their email from the session
     User.findOne({ username: req.session.user.username }, function (err, user) {
       if (!user) {
@@ -42,31 +50,24 @@ app.get('/', function(req, res) {
         res.redirect('/login');
       } else {
         // expose the user to the template by using res.locals
-        res.locals.user = user;*/
- 
+        res.locals.user = user;
+        app.locals.user = user;
+  
         // render the dashboard page
         Question.find({}, (err, polls) => {
         	if (err) {
         		console.log(err);
-        	} else {/*
-            console.log("\npolls: \n", polls);
-            polls.forEach(function(poll) {
-              console.log(poll);
-              poll.answers.forEach(function(answer) {
-                console.log(answer);
-                Answer.find({'_id': answer}, (err, ans) => {
-                  console.log(ans);
-                });
-              })
-            });*/
-        		res.render('index', {polls: polls});
+        	} else {
+            console.log(res.locals.user);
+        		res.render('index', {polls: polls, err: res.locals.err});
         	}
         });
-      /*}
+      }
     });
   } else {
+    req.session.destroy();
     res.redirect('/login');
-  }*/
+  }
 });
 
 app.get('/ask', function(req, res) {
@@ -108,6 +109,10 @@ app.post('/ask', function(req, res) {
 
 app.post('/vote', function(req, res) {
   console.log(req.body);
+  if (!req.session.user) {
+    res.locals.err = "You must be logged in to vote.";
+    res.redirect("/");
+  }
   // also get user id from session
   Answer.find({'_id': req.body.choice}, function(err, answer) {
     if (err) {
@@ -115,17 +120,21 @@ app.post('/vote', function(req, res) {
       res.redirect(302, '/');
     } else {
       console.log(answer);
-      //answer.voters.push(req.session.user);
-      /*answer.save(function(err) {
+      if (req.session.user) {
+        answer[0].voters.push(req.session.user);
+      answer[0].save(function(err) {
         if (err) {
           console.log(err);
           res.redirect(302, '/');
         } else {
+          console.log(answer[0]);
+          console.log('redirecting to index');
           res.redirect(302, '/');
         }
       });
-      */
-      res.redirect(302, '/');
+      } else { // no user
+        res.redirect(302, '/');
+      }
     }
   });
 });
@@ -139,14 +148,24 @@ app.get('/register', function(req, res) {
 });
 
 app.post('/login', function(req, res) {
-  User.findOne({ username: req.body.username }, function(err, user) {
+  const password = req.body.password;
+  const username = req.body.username;
+  User.findOne({ username: username }, function(err, user) {
     if (!user) {
-      res.render('login', { error: 'Invalid email or password.' });
+      res.render('login', { error: 'Invalid username or password.' });
     } else {
-      bcrypt.compare(req.body.password, user.password, function(err, result) {
+      bcrypt.compare(password, user.password, function(err, result) {
         if (result) {
-          req.session.user = user;
-          res.redirect('/');
+          req.session.regenerate((err) => {
+            if (!err) {
+              console.log('success!');
+              req.session.user = user;
+              res.redirect('/'); 
+            } else {
+              console.log('error'); 
+              res.send('an error occurred, please see the server logs for more information');
+            }
+          });
         } else {
           res.render('login', { error: 'Invalid email or password.' });
         }
@@ -155,14 +174,76 @@ app.post('/login', function(req, res) {
   });
 });
 
-app.get('/register', function(req, res) {
-	res.render('register');
-});
-
 app.post('/register', function(req, res) {
-	res.redirect('activation', 300);
+  const password = req.body.password;
+  const username = req.body.username;
+  const email = req.body.email;
+  const gender = req.body.gender;
+  let birthday = req.body.birthday;
+  birthday = birthday.split('/');
+  let day = birthday[0];
+  let month = birthday[1];
+  let year = birthday[2];
+  const bd = new Date(year, month, day);
+  console.log(bd);
+  let taken = false;
+  User.findOne({ username: username }, function(err, doc) {
+    if (err) {
+      res.send('an error occurred, please see the server logs for more information');
+    }
+    if (doc) { 
+      taken = true;
+    }
+  });
+  if (password.length < 8) {
+    // add other validation here or with mongo validation
+    res.render('register', {error: 'Password must have at least 8 characters.'});
+  } else if (taken) {
+    res.render('register', {error: 'Username taken.'});
+  } else {
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+      if (err) {
+        res.render('register', {error: 'Something happened.'});
+      } else {
+        const user = new User({
+          username: username,
+          password: hash,
+          email: email,
+          gender: gender,
+          birth_date: bd,
+          num_points: 0
+        });
+        user.save(function(err) {
+          if (err) {
+            console.log(err);
+            res.send('an error occurred, please see the server logs for more information');
+          } else {
+            req.session.regenerate((err) => {
+              if (!err) {
+                req.session.user = user;
+                res.redirect('/'); 
+              } else {
+                console.log('error'); 
+                res.send('an error occurred, please see the server logs for more information');
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 });
 
+app.get('/logout', function(req, res) {
+  req.session.destroy(function(err) {
+    if (err) {
+      res.send(err);
+    }
+    else {
+      res.redirect(302, '/login');
+    }
+  });
+});
 // app.get('/activation', function(req, res) {
 // 	res.render('activation');
 // });

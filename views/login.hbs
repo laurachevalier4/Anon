@@ -2,7 +2,6 @@
     <h1>Login</h1>
     {{#if error}}
         <p class="error">{{ error }}</p>
-        <p>Want to go <a href="/">home</a>?</p>
     {{/if}}
     <form method="POST" action="/login">
         <input type="text" name="username" placeholder="Username"><br>

@@ -2,7 +2,6 @@
     <h1>Register</h1>
     {{#if error}}
         <p class="error">{{ error }}</p>
-        <p>Want to go <a href="/">home</a>?</p>
     {{/if}}
     <form method="POST" action="/register">
         Username:&nbsp; <input type="text" name="username" placeholder="Username" required><br>

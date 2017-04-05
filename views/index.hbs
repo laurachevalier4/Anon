@@ -13,6 +13,9 @@
             <label for="{{answer._id}}"> &nbsp;{{answer.text}}</label><br>
             {{/each}}
           </div>
+          {{#if err}}
+            <p>{{err}}</p>
+          {{/if}}
           <div class="submit-button-container">
             <input class="btn-vote submit-button" type="submit" value="Vote"/>
           </div>
