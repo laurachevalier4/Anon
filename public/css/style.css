@@ -31,6 +31,7 @@ body {
   padding: 1em;
   margin-bottom: .5em;
   margin-top: .5em;
+  border: 2px solid white;
 }
 
 .submit-button {
@@ -51,15 +52,19 @@ body {
   cursor: pointer;
 }
 
+/* END VOTE FORM STYLING */
+
 .question-detail, .results {
   padding: 1em;
   margin: auto;
   font-family: 'Prata', serif;
   font-size: 1em;
-  background: rgba(255, 255, 255, .5);
+  background: rgba(255, 255, 255, .6);
 }
 
-/* END VOTE FORM STYLING */
+.question-detail {
+  border: 2px solid white;
+}
 
 .results, .results ul li {
   font-size: 1em;
