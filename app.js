@@ -51,7 +51,7 @@ hbs.registerHelper("userVoted", function(question) {
         }
       });
       // WHY ISN'T THIS WORKING
-      // need to get this working so I can show visualizations based on whether or not a user has voted for a question
+      // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
       return false;
     }
   })
@@ -71,11 +71,9 @@ app.get('/', function(req, res) {
         req.session.reset();
         res.redirect('/login');
       } else {
-        // expose the user to the template by using res.locals
+        // expose the user to the template by using res.locals (?)
         res.locals.user = user;
         app.locals.user = user;
-  
-        // render the dashboard page
         Question.find({}, (err, polls) => {
         	if (err) {
         		console.log(err);
@@ -113,7 +111,7 @@ app.post('/ask', function(req, res) {
 		_id: id, // use ObjectId to generate new id
 		text: req.body.question,
 		category: req.body.category, 
-		asked_by: new ObjectId, // placeholder until I have session management
+		asked_by: new ObjectId,
 		answered_by: [],
 		answers: choices
 	});
@@ -172,7 +170,10 @@ app.get('/register', function(req, res) {
 app.post('/login', function(req, res) {
   const password = req.body.password;
   const username = req.body.username;
-  User.findOne({ username: username }, function(err, user) {
+  User.findOne({ $or: [
+    { username: username }, // user can login using username or email
+    { email: username }
+    ]}, function(err, user) {
     if (!user) {
       res.render('login', { error: 'Invalid username or password.' });
     } else {
