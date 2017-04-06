@@ -39,22 +39,28 @@ hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper("userVoted", function(question) {
-  Question.findOne({_id: question}, function(err, q) {
-    if (err) {
-      console.log(err);
-      return false;
-    } else {
-      q.answered_by.forEach(function(userid) {
-        if (userid.toString() === app.locals.user._id.toString()) {
-          // working fine, returns true where it should
-          return true;
-        }
-      });
-      // WHY ISN'T THIS WORKING
-      // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
-      return false;
-    }
-  })
+  console.log('calling');
+  let val = false;
+  if (app.locals.user) {
+    console.log(question);
+    Question.findOne({_id: question}, function(err, q) {
+      if (err) {
+        console.log(err);
+        val = false;
+      } else {
+        q.answered_by.forEach(function(userid) {
+          if (userid.toString() === app.locals.user._id.toString()) {
+            // working fine, returns true where it should
+            val = true;
+          }
+        });
+        // WHY ISN'T THIS WORKING
+        // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
+        console.log(val);
+        return val;
+      }
+    });
+  }
 });
 hbs.registerHelper('pluralize', function(number, single, plural) {
   if (number === 1) { return single; }
@@ -68,7 +74,7 @@ app.get('/', function(req, res) {
       if (!user) {
         // if the user isn't found in the DB, reset the session info and
         // redirect the user to the login page
-        req.session.reset();
+        req.session.destroy();
         res.redirect('/login');
       } else {
         // expose the user to the template by using res.locals (?)
@@ -111,7 +117,7 @@ app.post('/ask', function(req, res) {
 		_id: id, // use ObjectId to generate new id
 		text: req.body.question,
 		category: req.body.category, 
-		asked_by: new ObjectId,
+		asked_by: req.session.user._id,
 		answered_by: [],
 		answers: choices
 	});
@@ -164,7 +170,11 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/register', function(req, res) {
-  res.render('register');
+  if (req.session.user) {
+    res.redirect('/');
+  } else {
+    res.render('register');
+  }
 });
 
 app.post('/login', function(req, res) {
