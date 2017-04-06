@@ -10,8 +10,9 @@
           <div class="options">
             {{#each poll.answers as |answer|}}
               <input type="radio" name="choice" id="{{answer._id}}" value="{{answer._id}}" />
-              <label for="{{answer._id}}"> &nbsp;{{answer.text}}</label><br>
-              <p>{{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</p>
+              <label for="{{answer._id}}"> &nbsp;{{answer.text}}</label>
+              <span class="numvotes">{{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
+              <br>
             {{/each}}
           </div>
           {{#if err}}

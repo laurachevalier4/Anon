@@ -52,6 +52,11 @@ body {
   cursor: pointer;
 }
 
+.numvotes {
+  padding-left: 2em;
+  float: right;
+}
+
 /* END VOTE FORM STYLING */
 
 .question-detail, .results {
