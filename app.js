@@ -38,6 +38,23 @@ app.use(function(req, res, next) {
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
+hbs.registerHelper("userVoted", function(question) {
+  Question.findOne({_id: question}, function(err, q) {
+    if (err) {
+      console.log(err);
+      return false;
+    } else {
+      console.log(app.locals.user._id.toString());
+      q.answered_by.forEach(function(userid) {
+        if (userid.toString() === app.locals.user._id.toString()) {
+          console.log('yes!');
+          return true;
+        }
+      });
+      return false;
+    }
+  })
+});
 
 app.get('/', function(req, res) {
   if (req.session && req.session.user) { // Check if session exists
@@ -58,7 +75,6 @@ app.get('/', function(req, res) {
         	if (err) {
         		console.log(err);
         	} else {
-            console.log(res.locals.user);
         		res.render('index', {polls: polls, err: res.locals.err});
         	}
         });
@@ -127,9 +143,24 @@ app.post('/vote', function(req, res) {
           console.log(err);
           res.redirect(302, '/');
         } else {
-          console.log(answer[0]);
-          console.log('redirecting to index');
-          res.redirect(302, '/');
+          // save question as well, adding user to answered_by
+          Question.findOne({answers: {$elemMatch: {_id: answer[0]._id}}}, function(err, question) {
+            if (err) {
+              console.log(err);
+              res.redirect(302, '/');
+            } else {
+              question.answered_by.push(req.session.user._id);
+              question.save(function(err) {
+                if (err) {
+                  console.log(err);
+                  res.redirect(302, '/');
+                } else {
+                  console.log('redirecting to index');
+                  res.redirect(302, '/');
+                }
+              });
+            }
+          });
         }
       });
       } else { // no user

@@ -19,6 +19,9 @@
           <div class="submit-button-container">
             <input class="btn-vote submit-button" type="submit" value="Vote"/>
           </div>
+          {{#if (userVoted poll)}}
+            <p>You've already voted for this!</p>
+          {{/if}}
           <!-- User should only be able to submit if they've been authenticated -->
         </form>
         <div class="question-info">
