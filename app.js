@@ -44,16 +44,21 @@ hbs.registerHelper("userVoted", function(question) {
       console.log(err);
       return false;
     } else {
-      console.log(app.locals.user._id.toString());
       q.answered_by.forEach(function(userid) {
         if (userid.toString() === app.locals.user._id.toString()) {
-          console.log('yes!');
+          // working fine, returns true where it should
           return true;
         }
       });
+      // WHY ISN'T THIS WORKING
+      // need to get this working so I can show visualizations based on whether or not a user has voted for a question
       return false;
     }
   })
+});
+hbs.registerHelper('pluralize', function(number, single, plural) {
+  if (number === 1) { return single; }
+  else { return plural; }
 });
 
 app.get('/', function(req, res) {
@@ -124,48 +129,34 @@ app.post('/ask', function(req, res) {
 });
 
 app.post('/vote', function(req, res) {
-  console.log(req.body);
   if (!req.session.user) {
     res.locals.err = "You must be logged in to vote.";
-    res.redirect("/");
+    res.redirect("/login");
   }
   // also get user id from session
-  Answer.find({'_id': req.body.choice}, function(err, answer) {
+  Question.findOne({answers: {$elemMatch: {_id: req.body.choice}}}, function(err, question) {
     if (err) {
       console.log(err);
       res.redirect(302, '/');
     } else {
-      console.log(answer);
-      if (req.session.user) {
-        answer[0].voters.push(req.session.user);
-      answer[0].save(function(err) {
+      const answer = question.answers.id(req.body.choice);
+      answer.voters.push(req.session.user);
+      answer.save(function(err) {
         if (err) {
           console.log(err);
           res.redirect(302, '/');
         } else {
-          // save question as well, adding user to answered_by
-          Question.findOne({answers: {$elemMatch: {_id: answer[0]._id}}}, function(err, question) {
+          question.answered_by.push(req.session.user._id);
+          question.save(function(err) {
             if (err) {
               console.log(err);
               res.redirect(302, '/');
             } else {
-              question.answered_by.push(req.session.user._id);
-              question.save(function(err) {
-                if (err) {
-                  console.log(err);
-                  res.redirect(302, '/');
-                } else {
-                  console.log('redirecting to index');
-                  res.redirect(302, '/');
-                }
-              });
-            }
+              res.redirect(302, '/');
+            } 
           });
         }
       });
-      } else { // no user
-        res.redirect(302, '/');
-      }
     }
   });
 });
@@ -190,6 +181,7 @@ app.post('/login', function(req, res) {
           req.session.regenerate((err) => {
             if (!err) {
               console.log('success!');
+              app.locals.user = user;
               req.session.user = user;
               res.redirect('/'); 
             } else {
@@ -216,7 +208,6 @@ app.post('/register', function(req, res) {
   let month = birthday[1];
   let year = birthday[2];
   const bd = new Date(year, month, day);
-  console.log(bd);
   let taken = false;
   User.findOne({ username: username }, function(err, doc) {
     if (err) {
