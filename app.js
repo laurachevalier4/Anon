@@ -9,6 +9,7 @@ const hbs = require('hbs');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const uuid = require('uuid');
+const client = require('redis').createClient(process.env.REDIS_URL);
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
