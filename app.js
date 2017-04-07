@@ -284,7 +284,17 @@ app.get('/logout', function(req, res) {
 // 	res.render('activation');
 // });
 
-app.listen(3000);
+app.get('/favicon.ico', function(req, res) {
+  res.sendFile('images/favicon.ico', function(err) {
+    if(err) {
+      next(err);
+    } else {
+      console.log('sent favicon.ico');
+    }
+  });
+});
+
+//app.listen(3000);
 
 // you can use express Router to have the routes in a separate file
 // also consider having all of the routes related to forms in a separate file or folder
