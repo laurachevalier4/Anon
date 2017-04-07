@@ -294,7 +294,7 @@ app.get('/favicon.ico', function(req, res) {
   });
 });
 
-//app.listen(3000);
+app.listen(process.env.PORT || 5000); // heroku dynamically assigns a port
 
 // you can use express Router to have the routes in a separate file
 // also consider having all of the routes related to forms in a separate file or folder
