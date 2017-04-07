@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 const db = require('./db');
 const hbs = require('hbs');
 const bcrypt = require('bcrypt');
@@ -14,6 +15,7 @@ const Answer = mongoose.model('Answer');
 const ObjectId = mongoose.Types.ObjectId;
 
 const app = express();
+const store = new RedisStore({ url: process.env.REDIS_URL });
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.set('view engine', 'hbs');
@@ -25,6 +27,7 @@ const sessionOptions = {
   resave: true,
   saveUninitialized: true,
   cookie: { path: '/', httpOnly: true, secure: false, maxAge: null }, // default
+  store: store
 };
 app.use(session(sessionOptions));
 
@@ -281,7 +284,7 @@ app.get('/logout', function(req, res) {
 // 	res.render('activation');
 // });
 
-// app.listen(3000);
+app.listen(3000);
 
 // you can use express Router to have the routes in a separate file
 // also consider having all of the routes related to forms in a separate file or folder

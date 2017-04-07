@@ -46,4 +46,4 @@ mongoose.model('User', User);
 mongoose.model('Question', Question);
 mongoose.model('Answer', Answer);
 
-mongoose.connect(process.env.MONGODB_URI); // get mongodb uri env variable
+mongoose.connect(process.env.MONGOLAB_URI); // get mongodb uri env variable
