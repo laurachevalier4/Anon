@@ -24,7 +24,7 @@ const sessionOptions = {
   secret: 'd28ef806c691f4ed9752e03808423ed5c269d62964e9793cbc26239063a6db22498ad782ea97ab8c141d0670fc297961be52dad808e5581a96345582d016115a',
   resave: true,
   saveUninitialized: true,
-  cookie: { path: '/', httpOnly: true, secure: false, maxAge: null } // default
+  cookie: { path: '/', httpOnly: true, secure: false, maxAge: null }, // default
 };
 app.use(session(sessionOptions));
 

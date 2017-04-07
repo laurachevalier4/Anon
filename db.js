@@ -46,5 +46,4 @@ mongoose.model('User', User);
 mongoose.model('Question', Question);
 mongoose.model('Answer', Answer);
 
-// how can I make this more secretive?
-mongoose.connect('mongodb://luru:chevalier@ds155160.mlab.com:55160/heroku_dlm2r8z7');
+mongoose.connect(process.env.MONGODB_URI); // get mongodb uri env variable
