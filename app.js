@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, "views"));
 
 function sessions(url, secret) {
   const store = new RedisStore({ url: url });
-  const session = expressSession({
+  const session = session({
     secret: secret,
     store: store,
     resave: true,
