@@ -24,21 +24,21 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set('views', path.join(__dirname, "views"));
 
 
-const store = new RedisStore({ url: process.env.REDIS_URL });
-const hour = 3600000;
-app.use(cookieParser(process.env.COOKIE_SECRET));
-const sessionOptions = {
-  secret: process.env.SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true,
-  store: store,
-  // cookie: {
-  //   maxAge: hour,
-  //   secure: true,
-  //   expires: new Date(Date.now() + hour)
-  // }
+function sessions(url, secret) {
+  const store = new RedisStore({ url: url });
+  const session = expressSession({
+    secret: secret,
+    store: store,
+    resave: true,
+    saveUninitialized: true
+  });
+
+  return session;
 };
-app.use(session(sessionOptions));
+
+app
+  .use(cookieParser(process.env.COOKIE_SECRET))
+  .use(sessions(process.env.REDIS_URL, process.env.COOKIE_SECRET));
 
 app.use(function(req, res, next) {
   req.session.user = req.session.user || { id: uuid.v1() };
