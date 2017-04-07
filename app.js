@@ -301,7 +301,7 @@ app.get('/logout', function(req, res) {
 app.get('/favicon.ico', function(req, res) {
   res.sendFile(path.join(__dirname, "public") + 'images/favicon.ico', function(err) {
     if(err) {
-      next(err);
+      console.log(err);
     } else {
       console.log('sent favicon.ico');
     }
