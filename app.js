@@ -40,7 +40,7 @@ const sessionOptions = {
 };
 app.use(session(sessionOptions));
 
-app.user(function(req, res, next) {
+app.use(function(req, res, next) {
   req.session.user = req.session.user || { id: uuid.v1() };
   req.user = req.session.user;
   next();
