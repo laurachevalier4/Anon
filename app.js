@@ -187,7 +187,7 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/register', function(req, res) {
-  if (if req.session && req.session.user) {
+  if (req.session && req.session.user) {
     res.redirect('/');
   } else {
     res.render('register');
