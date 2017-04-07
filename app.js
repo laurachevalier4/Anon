@@ -85,8 +85,14 @@ app.get('/', function(req, res) {
       if (!user) {
         // if the user isn't found in the DB, reset the session info and
         // redirect the user to the login page
-        req.session.destroy();
-        res.redirect('/login');
+        req.session.destroy(function(err) {
+          if (err) {
+            res.send(err);
+          }
+          else {
+            res.redirect(302, '/login');
+          }
+        });
       } else {
         // expose the user to the template by using res.locals (?)
         res.locals.user = user;
@@ -101,7 +107,7 @@ app.get('/', function(req, res) {
       }
     });
   } else {
-    req.session.destroy();
+    // can't destroy session here. req.session undefined
     res.redirect('/login');
   }
 });
@@ -293,7 +299,7 @@ app.get('/logout', function(req, res) {
 // });
 
 app.get('/favicon.ico', function(req, res) {
-  res.sendFile('images/favicon.ico', function(err) {
+  res.sendFile(path.join(__dirname, "public") + 'images/favicon.ico', function(err) {
     if(err) {
       next(err);
     } else {
