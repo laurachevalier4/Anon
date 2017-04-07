@@ -50,12 +50,6 @@ app.use(function(req, res, next) {
   req.user = req.session.user;
   next();
 });
-// app.use(function(req, res, next) {
-//   const hour = 3600000;
-//   req.session.cookie.expires = new Date(Date.now() + hour);
-//   req.session.cookie.maxAge = hour;
-//   next();
-// });
 
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
@@ -90,7 +84,7 @@ hbs.registerHelper('pluralize', function(number, single, plural) {
 });
 
 app.get('/', function(req, res) {
-  if (req.session && req.session.user) { // Check if session exists
+  if (req.session && req.session.user.username) { // Check if session exists
     // lookup the user in the DB by pulling their email from the session
     User.findOne({ username: req.session.user.username }, function (err, user) {
       if (!user) {
@@ -161,7 +155,7 @@ app.post('/ask', function(req, res) {
 });
 
 app.post('/vote', function(req, res) {
-  if (!req.session || !req.session.user) {
+  if (!req.session || !req.session.user.username) {
     res.locals.err = "You must be logged in to vote.";
     res.redirect("/login");
   }
@@ -198,7 +192,7 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/register', function(req, res) {
-  if (req.session && req.session.user) {
+  if (req.session && req.session.user.username) {
     res.redirect('/');
   } else {
     res.render('register');
