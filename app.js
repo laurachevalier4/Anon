@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const session = require('express-session');
+const expressSession = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const cookieParser = require('cookie-parser');
 const db = require('./db');
@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, "views"));
 
 function sessions(url, secret) {
   const store = new RedisStore({ url: url });
-  const session = session({
+  const session = expressSession({
     secret: secret,
     store: store,
     resave: true,
