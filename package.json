@@ -25,6 +25,7 @@
     "express-session": "^1.15.2",
     "handlebars": "^4.0.6",
     "handlebars-dateformat": "^1.0.1",
+    "hbs": "^4.0.1",
     "mongoose": "^4.9.2",
     "path": "^0.12.7"
   },
