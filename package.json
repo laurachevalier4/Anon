@@ -30,7 +30,8 @@
     "handlebars-dateformat": "^1.0.1",
     "hbs": "^4.0.1",
     "mongoose": "^4.9.2",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "uuid": "^3.0.1"
   },
   "engines": {
     "node": "6.7.0"

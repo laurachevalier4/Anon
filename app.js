@@ -8,6 +8,7 @@ const db = require('./db');
 const hbs = require('hbs');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const uuid = require('uuid');
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
@@ -39,6 +40,11 @@ const sessionOptions = {
 };
 app.use(session(sessionOptions));
 
+app.user(function(req, res, next) {
+  req.session.user = req.session.user || { id: uuid.v1() };
+  req.user = req.session.user;
+  next();
+});
 // app.use(function(req, res, next) {
 //   const hour = 3600000;
 //   req.session.cookie.expires = new Date(Date.now() + hour);
