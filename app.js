@@ -28,7 +28,6 @@ const sessionOptions = {
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
-  cookie: { path: '/', httpOnly: true, secure: false, maxAge: null }, // default
   store: store
 };
 app.use(session(sessionOptions));
