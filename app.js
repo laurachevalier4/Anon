@@ -16,7 +16,9 @@ const Answer = mongoose.model('Answer');
 const ObjectId = mongoose.Types.ObjectId;
 
 const app = express();
+
 const store = new RedisStore({ url: process.env.REDIS_URL });
+const hour = 3600000;
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.set('view engine', 'hbs');
