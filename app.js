@@ -7,9 +7,9 @@ const cookieParser = require('cookie-parser');
 const db = require('./db');
 const hbs = require('hbs');
 const bcrypt = require('bcrypt');
+const url = require('url');
 const saltRounds = 10;
 const uuid = require('uuid');
-const client = require('redis').createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
@@ -37,9 +37,13 @@ function sessions(url, secret) {
   return session;
 };
 
+const redisURL = url.parse(process.env.REDISCLOUD_URL);
+const client = require('redis').createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+client.auth(redisURL.auth.split(":")[1]);
+
 app
   .use(cookieParser(process.env.COOKIE_SECRET))
-  .use(sessions(process.env.REDIS_URL, process.env.COOKIE_SECRET));
+  .use(sessions(process.env.REDISCLOUD_URL, process.env.COOKIE_SECRET));
 
 app.use(function(req, res, next) {
   req.session.user = req.session.user || { id: uuid.v1() };
