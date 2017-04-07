@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
-var RedisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis')(session);
+const cookieParser = require('cookie-parser');
 const db = require('./db');
 const hbs = require('hbs');
 const bcrypt = require('bcrypt');
@@ -22,8 +23,9 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, "public")));
 app.set('views', path.join(__dirname, "views"));
 
+app.use(cookieParser(process.env.COOKIE_SECRET));
 const sessionOptions = {
-  secret: 'd28ef806c691f4ed9752e03808423ed5c269d62964e9793cbc26239063a6db22498ad782ea97ab8c141d0670fc297961be52dad808e5581a96345582d016115a',
+  secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
   cookie: { path: '/', httpOnly: true, secure: false, maxAge: null }, // default

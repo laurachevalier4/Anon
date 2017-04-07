@@ -23,6 +23,7 @@
     "client-sessions": "^0.7.0",
     "connect": "^3.6.0",
     "connect-redis": "^3.2.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
     "handlebars": "^4.0.6",
