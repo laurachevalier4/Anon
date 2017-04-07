@@ -18,25 +18,25 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const app = express();
 
-const store = new RedisStore({ url: process.env.REDIS_URL });
-const hour = 3600000;
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, "public")));
 app.set('views', path.join(__dirname, "views"));
 
+
+const store = new RedisStore({ url: process.env.REDIS_URL });
+const hour = 3600000;
 app.use(cookieParser(process.env.COOKIE_SECRET));
 const sessionOptions = {
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
   store: store,
-  cookie: {
-    maxAge: hour,
-    secure: true,
-    expires: new Date(Date.now() + hour)
-  }
+  // cookie: {
+  //   maxAge: hour,
+  //   secure: true,
+  //   expires: new Date(Date.now() + hour)
+  // }
 };
 app.use(session(sessionOptions));
 
