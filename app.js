@@ -28,16 +28,21 @@ const sessionOptions = {
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
-  store: store
+  store: store,
+  cookie: {
+    maxAge: hour,
+    secure: true,
+    expires: new Date(Date.now() + hour)
+  }
 };
 app.use(session(sessionOptions));
 
-app.use(function(req, res, next) {
-  const hour = 3600000;
-  req.session.cookie.expires = new Date(Date.now() + hour);
-  req.session.cookie.maxAge = hour;
-  next();
-});
+// app.use(function(req, res, next) {
+//   const hour = 3600000;
+//   req.session.cookie.expires = new Date(Date.now() + hour);
+//   req.session.cookie.maxAge = hour;
+//   next();
+// });
 
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
