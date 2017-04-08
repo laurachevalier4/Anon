@@ -72,6 +72,10 @@ body {
   background: rgba(255, 255, 255, .8);
 }
 
+.question-detail:hover {
+  background: rgba(255, 255, 255, .9);
+}
+
 .question-info {
   text-align: right;
   font-size: .75em;
