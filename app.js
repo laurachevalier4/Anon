@@ -53,8 +53,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-hbs.registerPartials(__dirname + '/views/partials');
-hbs.registerPartial('detail', '{{detail}}');
+// hbs.registerPartials(__dirname + '/views/partials');
+// hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 /*hbs.registerHelper('userVoted', function(question) {
   // *** Need to find a way to make this asynchronous; be able to return the value that's being return in call to Question.findOne()
