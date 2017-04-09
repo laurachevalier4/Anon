@@ -4,15 +4,16 @@
     <!-- Need to add check of whether or not the user has answered this question -->
       <div class="question-detail">
         <div class="question-text">
-          {{ poll.text }}
+          <h1>{{ poll.text }}</h1>
         </div>
         {{#if (userVoted poll)}}
-          <p>You've already voted for this!</p>
-          {{#each poll.answers as |answer|}}
-            <p>{{answer.text}}</p>
-            <span class="numvotes">{{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
-            <br>
-          {{/each}}
+          <h2>Results</h2>
+          <div class="options">
+            {{#each poll.answers as |answer|}}
+              <p>{{answer.text}} : {{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
+              <br>
+            {{/each}}
+          </div>
         {{else}}
           <form class="vote-form" action="/vote" method="POST">
             <div class="options">
