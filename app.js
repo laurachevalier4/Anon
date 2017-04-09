@@ -69,7 +69,6 @@ hbs.registerHelper("userVoted", function(question) {
           if (userid.toString() === app.locals.user._id.toString()) {
             // working fine, returns true where it should
             val = true;
-            console.log("true!", userid, app.locals.user._id);
           }
         });
         // WHY ISN'T THIS WORKING
@@ -78,6 +77,9 @@ hbs.registerHelper("userVoted", function(question) {
       console.log(val);
       return val;
     });
+  } else {
+    console.log('no user in app.locals');
+    return false;
   }
 });
 
