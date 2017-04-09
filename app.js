@@ -64,7 +64,6 @@ hbs.registerHelper('userVoted', function(question) {
         console.log(err);
         return val;
       } else {
-        console.log(q.answered_by);
         q.answered_by.forEach(function(userid) {
           if (userid.toString() === app.locals.user._id.toString()) {
             // working fine, returns true where it should
@@ -74,7 +73,6 @@ hbs.registerHelper('userVoted', function(question) {
         // WHY ISN'T THIS WORKING
         // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
       }
-      console.log(val);
       return val;
     });
     console.log(voted);
