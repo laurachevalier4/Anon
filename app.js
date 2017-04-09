@@ -1,3 +1,16 @@
+/*
+TODO:
+  // display data visualization when a user has already voted for a question
+    // only be able to vote once per question
+  // label a user's questions "your question" or some identifier
+  // upvoting questions
+  // ability to bookmark questions; AND/OR...
+  // dashboard 
+    // one page for questions asked
+    // one for questions answered
+*/
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -56,6 +69,7 @@ hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper('userVoted', function(question) {
+  console.log(question);
   // *** Need to find a way to make this asynchronous; be able to return the value that's being return in call to Question.findOne()
   console.log('calling');
   let done = false;
