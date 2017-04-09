@@ -48,6 +48,7 @@ app
 app.use(function(req, res, next) {
   req.session.user = req.session.user || { id: uuid.v1() };
   req.user = req.session.user;
+  app.locals.user = req.session.user;
   next();
 });
 
@@ -57,7 +58,7 @@ hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper("userVoted", function(question) {
   console.log('calling');
   let val = false;
-  if (app.locals.user) {
+  if (app.locals.user._id) {
     console.log(question);
     Question.findOne({_id: question}, function(err, q) {
       if (err) {
@@ -65,19 +66,19 @@ hbs.registerHelper("userVoted", function(question) {
         val = false;
       } else {
         q.answered_by.forEach(function(userid) {
-          if (userid.toString() === req.session.user._id.toString()) {
+          if (userid.toString() === app.locals.user._id.toString()) {
             // working fine, returns true where it should
             val = true;
           }
         });
         // WHY ISN'T THIS WORKING
         // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
-        console.log(val);
-        return val;
       }
     });
   }
+  return val;
 });
+
 hbs.registerHelper('pluralize', function(number, single, plural) {
   if (number === 1) { return single; }
   else { return plural; }
