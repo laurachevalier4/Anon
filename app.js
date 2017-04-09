@@ -55,7 +55,7 @@ app.use(function(req, res, next) {
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
-hbs.registerHelper("userVoted", function(question) {
+hbs.registerHelper('userVoted', function(question) {
   console.log('calling');
   let val = false;
   if (app.locals.user._id) {
@@ -78,7 +78,7 @@ hbs.registerHelper("userVoted", function(question) {
       return val;
     });
   } else {
-    console.log('no user in app.locals');
+    // we never reach this point; app.locals.user not the problem
     return false;
   }
 });
