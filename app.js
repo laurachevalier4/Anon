@@ -77,6 +77,7 @@ hbs.registerHelper("userVoted", function(question) {
       }
     });
   }
+  console.log(val);
   return val;
 });
 
