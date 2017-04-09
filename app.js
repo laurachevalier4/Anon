@@ -65,7 +65,7 @@ hbs.registerHelper("userVoted", function(question) {
         val = false;
       } else {
         q.answered_by.forEach(function(userid) {
-          if (userid.toString() === app.locals.user._id.toString()) {
+          if (userid.toString() === req.session.user._id.toString()) {
             // working fine, returns true where it should
             val = true;
           }
