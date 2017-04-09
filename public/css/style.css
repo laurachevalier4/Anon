@@ -34,6 +34,10 @@ body {
   border: 2px solid white;
 }
 
+.results {
+  width: 80%;
+}
+
 .submit-button {
   background: rgba(255, 255, 255, .7);
   color: #333;

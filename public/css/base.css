@@ -141,3 +141,7 @@ input[type=text], input[type=password], input[type=email] {
 .error {
   color: red;
 }
+
+h1 {
+  font-size: 1em;
+}
