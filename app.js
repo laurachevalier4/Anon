@@ -59,8 +59,8 @@ hbs.registerHelper('userVoted', function(question) {
   console.log('calling');
   let done = false;
   if (app.locals.user._id) {
+    let val = false;
     Question.findOne({_id: question}, function(err, q) {
-      let val = false;
       if (err) {
         console.log(err);
         return val;
@@ -75,6 +75,7 @@ hbs.registerHelper('userVoted', function(question) {
         // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
       }
       done = true;
+      return val;
     });
     while (!done) {
       console.log('waiting');
