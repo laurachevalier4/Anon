@@ -57,12 +57,12 @@ hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper('userVoted', function(question) {
   console.log('calling');
-  let val = false;
   if (app.locals.user._id) {
-    return Question.findOne({_id: question}, function(err, q) {
+    let voted = Question.findOne({_id: question}, function(err, q) {
+      let val = false;
       if (err) {
         console.log(err);
-        return false;
+        return val;
       } else {
         console.log(q.answered_by);
         q.answered_by.forEach(function(userid) {
@@ -77,6 +77,8 @@ hbs.registerHelper('userVoted', function(question) {
       console.log(val);
       return val;
     });
+    console.log(voted);
+    return voted;
   } else {
     // we never reach this point; app.locals.user not the problem
     return false;
