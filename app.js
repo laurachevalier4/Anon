@@ -2,10 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const expressSession = require('express-session');
+const hbs = require('express-hbs');
 const RedisStore = require('connect-redis')(expressSession);
 const cookieParser = require('cookie-parser');
 const db = require('./db');
-const hbs = require('hbs');
+// const hbs = require('hbs');
 const bcrypt = require('bcrypt');
 const url = require('url');
 const saltRounds = 10;
@@ -55,7 +56,8 @@ app.use(function(req, res, next) {
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
-hbs.registerHelper('userVoted', function(question) {
+/*hbs.registerHelper('userVoted', function(question) {
+  // *** Need to find a way to make this asynchronous; be able to return the value that's being return in call to Question.findOne()
   console.log('calling');
   let done = false;
   if (app.locals.user._id) {
@@ -77,16 +79,39 @@ hbs.registerHelper('userVoted', function(question) {
       done = true;
       return val;
     });
-    while (!done) {
-      console.log('waiting');
-    }
     console.log(val);
     return val;
   } else {
     // we never reach this point; app.locals.user not the problem
     return false;
   }
+});*/
+
+hbs.registerAsyncHelper('userVoted', function(question, cb) {
+  if (app.locals.user._id) {
+    Question.findOne({_id: question}, function(err, q) {
+      let val = false;
+      if (err) {
+        console.log(err);
+        return val;
+      } else {
+        q.answered_by.forEach(function(userid) {
+          if (userid.toString() === app.locals.user._id.toString()) {
+            // working fine, returns true where it should
+            val = true;
+          }
+        });
+        // WHY ISN'T THIS WORKING
+        // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
+      }
+      cb(val);
+    });
+  }
 });
+
+function cb(val) {
+  return val;
+}
 
 hbs.registerHelper('pluralize', function(number, single, plural) {
   if (number === 1) { return single; }
