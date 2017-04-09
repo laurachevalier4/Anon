@@ -63,7 +63,7 @@ hbs.registerHelper("userVoted", function(question) {
     Question.findOne({_id: question}, function(err, q) {
       if (err) {
         console.log(err);
-        val = false;
+        return false;
       } else {
         q.answered_by.forEach(function(userid) {
           if (userid.toString() === app.locals.user._id.toString()) {
@@ -75,10 +75,10 @@ hbs.registerHelper("userVoted", function(question) {
         // WHY ISN'T THIS WORKING
         // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
       }
+      console.log(val);
+      return val;
     });
   }
-  console.log(val);
-  return val;
 });
 
 hbs.registerHelper('pluralize', function(number, single, plural) {
