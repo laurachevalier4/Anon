@@ -59,12 +59,12 @@ hbs.registerHelper("userVoted", function(question) {
   console.log('calling');
   let val = false;
   if (app.locals.user._id) {
-    console.log(question);
     Question.findOne({_id: question}, function(err, q) {
       if (err) {
         console.log(err);
         return false;
       } else {
+        console.log(q.answered_by);
         q.answered_by.forEach(function(userid) {
           if (userid.toString() === app.locals.user._id.toString()) {
             // working fine, returns true where it should
