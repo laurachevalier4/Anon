@@ -70,37 +70,13 @@ hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper('userVoted', function(question) {
   console.log(question);
-  // *** Need to find a way to make this asynchronous; be able to return the value that's being return in call to Question.findOne()
-  console.log('calling');
-  let done = false;
-  if (app.locals.user._id) {
-    let val = false;
-    Question.findOne({_id: question}, function(err, q) {
-      if (err) {
-        console.log(err);
-        return val;
-      } else {
-        q.answered_by.forEach(function(userid) {
-          if (userid.toString() === app.locals.user._id.toString()) {
-            // working fine, returns true where it should
-            val = true;
-          }
-        });
-        // WHY ISN'T THIS WORKING
-        // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
-      }
-      done = true;
-      return val;
-    });
-    /*while (!done) {
-      console.log('waiting');
-    }*/
-    console.log(val);
-    return val;
-  } else {
-    // we never reach this point; app.locals.user not the problem
-    return false;
-  }
+  let voted = false;
+  question.answered_by.forEach(function(userId) {
+    if (userId === app.locals.user._id) {
+      voted = true;
+    }
+  });
+  return voted;
 });
 
 hbs.registerHelper('pluralize', function(number, single, plural) {
