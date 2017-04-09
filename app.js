@@ -57,8 +57,9 @@ hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper('userVoted', function(question) {
   console.log('calling');
+  let done = false;
   if (app.locals.user._id) {
-    let voted = Question.findOne({_id: question}, function(err, q) {
+    Question.findOne({_id: question}, function(err, q) {
       let val = false;
       if (err) {
         console.log(err);
@@ -73,10 +74,13 @@ hbs.registerHelper('userVoted', function(question) {
         // WHY ISN'T THIS WORKING
         // need to get this working so I can remove vote form and show visualizations based on whether or not a user has voted for a question
       }
-      return val;
+      done = true;
     });
-    console.log(voted);
-    return voted;
+    while (!done) {
+      console.log('waiting');
+    }
+    console.log(val);
+    return val;
   } else {
     // we never reach this point; app.locals.user not the problem
     return false;
