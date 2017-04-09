@@ -59,7 +59,7 @@ hbs.registerHelper('userVoted', function(question) {
   console.log('calling');
   let val = false;
   if (app.locals.user._id) {
-    Question.findOne({_id: question}, function(err, q) {
+    return Question.findOne({_id: question}, function(err, q) {
       if (err) {
         console.log(err);
         return false;
