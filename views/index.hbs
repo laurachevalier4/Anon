@@ -6,25 +6,29 @@
         <div class="question-text">
           {{ poll.text }}
         </div>
-        <form class="vote-form" action="/vote" method="POST">
-          <div class="options">
-            {{#each poll.answers as |answer|}}
-              <input type="radio" name="choice" id="{{answer._id}}" value="{{answer._id}}" />
-              <label for="{{answer._id}}"> &nbsp;{{answer.text}}</label>
-              <span class="numvotes">{{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
-              <br>
-            {{/each}}
-          </div>
-          {{#if err}}
-            <p>{{err}}</p>
-          {{/if}}
-          <div class="submit-button-container">
-            <input class="btn-vote submit-button" type="submit" value="Vote"/>
-          </div>
-          {{#if (userVoted poll)}}
-            <p>You've already voted for this!</p>
-          {{else}}
-            <p>Well at least something is happening.</p>
+        {{#if (userVoted poll)}}
+          <p>You've already voted for this!</p>
+          {{#each poll.answers as |answer|}}
+            <p>{{answer.text}}</p>
+            <span class="numvotes">{{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
+            <br>
+          {{/each}}
+        {{else}}
+          <form class="vote-form" action="/vote" method="POST">
+            <div class="options">
+              {{#each poll.answers as |answer|}}
+                <input type="radio" name="choice" id="{{answer._id}}" value="{{answer._id}}" />
+                <label for="{{answer._id}}"> &nbsp;{{answer.text}}</label>
+                <span class="numvotes">{{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
+                <br>
+              {{/each}}
+            </div>
+            {{#if err}}
+              <p>{{err}}</p>
+            {{/if}}
+            <div class="submit-button-container">
+              <input class="btn-vote submit-button" type="submit" value="Vote"/>
+            </div>
           {{/if}}
           <!-- User should only be able to submit if they've been authenticated -->
         </form>

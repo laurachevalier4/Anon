@@ -69,14 +69,12 @@ hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper('userVoted', function(question) {
-  console.log(question.answered_by);
   let voted = false;
   question.answered_by.forEach(function(userId) {
     if (userId.toString() === app.locals.user._id.toString()) {
       voted = true;
     }
   });
-  console.log(voted);
   return voted;
 });
 
