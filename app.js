@@ -8,6 +8,7 @@ TODO:
   // dashboard 
     // one page for questions asked
     // one for questions answered
+  // scroll to the poll a user just voted on after rerendering index
 */
 
 

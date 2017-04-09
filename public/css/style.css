@@ -25,6 +25,10 @@ body {
   cursor: pointer;
 }
 
+.vote-form label {
+  line-height: 1.5em;
+}
+
 .options {
   width: 100%;
   background: rgba(255, 255, 255, .7);
