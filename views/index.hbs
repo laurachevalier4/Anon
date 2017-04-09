@@ -7,7 +7,7 @@
           <h1>{{ poll.text }}</h1>
         </div>
         {{#if (userVoted poll)}}
-          <h2>Results</h2>
+          <h2 class="midwidth">Results</h2>
           <div class="options results">
             {{#each poll.answers as |answer|}}
               <p>{{answer.text}} : {{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
