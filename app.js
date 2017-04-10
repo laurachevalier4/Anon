@@ -291,6 +291,7 @@ app.post('/register', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
+  app.locals.user = null;
   req.session.destroy(function(err) {
     if (err) {
       res.send(err);

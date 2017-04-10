@@ -1,3 +1,6 @@
+<script src="/js/pie.js"></script>
+<script src="/js/d3.min.js"></script>
+
 {{#if polls}}
     <ul style="margin-top: 2em;">
     {{#each polls as |poll|}}
@@ -13,6 +16,9 @@
               <p>{{answer.text}} : {{answer.voters.length}} {{pluralize answer.voters.length 'vote' 'votes'}}</span>
               <br>
             {{/each}}
+          </div>
+          <div class="viz">
+            <svg width="200" height="200"></svg>
           </div>
         {{else}}
           <form class="vote-form" action="/vote" method="POST">
