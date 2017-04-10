@@ -63,7 +63,7 @@ app.use(function(req, res, next) {
   req.session.user = req.session.user || { id: uuid.v1() };
   req.user = req.session.user;
   app.locals.user = req.session.user;
-  res.locals.user = req.session.user;
+  res.locals.user = req.session.user.username; // undefined if user is fake
   next();
 });
 
