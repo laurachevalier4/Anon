@@ -63,6 +63,7 @@ app.use(function(req, res, next) {
   req.session.user = req.session.user || { id: uuid.v1() };
   req.user = req.session.user;
   app.locals.user = req.session.user;
+  res.locals.user = req.session.user;
   next();
 });
 
@@ -291,7 +292,7 @@ app.post('/register', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
-  app.locals.user = null;
+  res.locals.user = null;
   req.session.destroy(function(err) {
     if (err) {
       res.send(err);
