@@ -14,13 +14,6 @@ TODO:
   // sort questions so that most recent appears at top
 */
 
-/*
-Authentication
-- passport
-- everyauth
-
-*/
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -115,6 +108,7 @@ app.get('/', function(req, res) {
         res.locals.user = user;
         app.locals.user = user;
         req.session.user = user;
+        console.log("req.session.user", req.session.user);
         Question.find({}, (err, polls) => {
         	if (err) {
         		console.log(err);
@@ -148,6 +142,7 @@ app.post('/ask', function(req, res) {
 			answer.save();
 		}
 	}
+  console.log("req.session.user", req.session.user);
 	let question = new Question({
 		_id: id, // use ObjectId to generate new id
 		text: req.body.question,
@@ -162,7 +157,18 @@ app.post('/ask', function(req, res) {
       res.redirect(302, '/');
     }
     else {
-      res.redirect(302, '/');
+      User.findOne({username: req.session.passport.user}, function(err, user) {
+        if (err) {
+          console.log(err);
+        }
+        user.questions.push(question._id);
+        user.save(function(err) {
+          if (err) {
+            console.log(err);
+          } 
+          res.redirect(302, '/');
+        });
+      });
     }
   });
 });
@@ -204,17 +210,17 @@ app.get('/login', function(req, res) {
 	res.render('login');
 });
 
+app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }),function(req, res) {
+  // look into how to make this work with username OR email :)
+  res.redirect('/');
+});
+
 app.get('/register', function(req, res) {
   if (req.session.passport && req.session.passport.user) {
     res.redirect('/');
   } else {
     res.render('register');
   }
-});
-
-app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }),function(req, res) {
-  // look into how to make this work with username OR email :)
-  res.redirect('/');
 });
 
 app.post('/register', function(req, res) {
@@ -254,7 +260,6 @@ app.post('/register', function(req, res) {
         return res.render('register', { error : err.message });
       }
       passport.authenticate('local')(req, res, function () {
-        console.log("user line 268", user);
         req.session.user = user;
         req.session.save(function(err) {
           if (err) {
@@ -282,5 +287,24 @@ app.get('/favicon.ico', function(req, res) {
     }
   });
 });
+
+app.get('/api/users/:question_id', function(req, res) {
+  // get list of users for each answer associated with a question
+  Question.findOne({_id: req.params.question_id}, function(err, question) {
+    res.json(question.answers.map(function(ans) {
+      return {
+        'text': ans.text,
+        'voters': JSON.stringify(ans.voters.map(function(voter) {
+          return {
+            'username': voter.username,
+            'gender': voter.gender,
+            'birth_date': voter.birth_date,
+          }
+        }))
+      }
+    }));
+  });
+});
+
 
 app.listen(process.env.PORT || 5000); // heroku dynamically assigns a port
