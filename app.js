@@ -95,7 +95,7 @@ hbs.registerHelper('pluralize', function(number, single, plural) {
 
 app.get('/', function(req, res) {
   console.log("success redirected here");
-  if (req.session && req.session.passport.user) { // Check if session exists
+  if (req.session.passport && req.session.passport.user) { // Check if session exists
     console.log(req.session);
     // lookup the user in the DB by pulling their email from the session
     User.findOne({ username: req.session.passport.user }, function (err, user) {
