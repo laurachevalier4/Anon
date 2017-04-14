@@ -168,7 +168,7 @@ app.post('/ask', function(req, res) {
 });
 
 app.post('/vote', function(req, res) {
-  if (!req.session || !req.session.user.username) {
+  if (!req.session.passport || !req.session.passport.user) {
     res.locals.err = "You must be logged in to vote.";
     res.redirect("/login");
   }
@@ -269,18 +269,9 @@ app.post('/register', function(req, res) {
 
 app.get('/logout', function(req, res) {
   res.locals.user = null;
-  req.session.destroy(function(err) {
-    if (err) {
-      res.send(err);
-    }
-    else {
-      res.redirect(302, '/login');
-    }
-  });
+  req.logout();
+  res.redirect('/login');
 });
-// app.get('/activation', function(req, res) {
-// 	res.render('activation');
-// });
 
 app.get('/favicon.ico', function(req, res) {
   res.sendFile(path.join(__dirname, "public") + '/images/favicon.ico', function(err) {
@@ -293,9 +284,3 @@ app.get('/favicon.ico', function(req, res) {
 });
 
 app.listen(process.env.PORT || 5000); // heroku dynamically assigns a port
-
-// you can use express Router to have the routes in a separate file
-// also consider having all of the routes related to forms in a separate file or folder
-  // where you will implement the logic and validation for each form,
-  // then based on the correct/incorrect input decide what the context will be to rerender the form
-  // or redirect if all of the input was perfect
