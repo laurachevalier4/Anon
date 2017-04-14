@@ -213,6 +213,7 @@ app.get('/register', function(req, res) {
 });
 
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }),function(req, res) {
+  // look into how to make this work with username OR email :)
   res.redirect('/');
 });
 
