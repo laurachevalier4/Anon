@@ -81,7 +81,7 @@ body {
 }
 
 .question-detail:hover {
-  background: rgba(255, 255, 255, .9);
+  background: rgba(255, 255, 255, .95);
 }
 
 .question-info {

@@ -1,6 +1,8 @@
 /*
 TODO:
   // display data visualization when a user has already voted for a question
+    // add option 'See Results' so that data will be loaded on click rather than for every one on the page
+    // default to showing results for the one just voted on and displaying 'Show Results' option for all others voted on beforehand (in another session?)
     // only be able to vote once per question
   // label a user's questions "your question" or some identifier
   // upvoting questions
@@ -9,8 +11,15 @@ TODO:
     // one page for questions asked
     // one for questions answered
   // scroll to the poll a user just voted on after rerendering index
+  // sort questions so that most recent appears at top
 */
 
+/*
+Authentication
+- passport
+- everyauth
+
+*/
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -19,13 +28,13 @@ const expressSession = require('express-session');
 const RedisStore = require('connect-redis')(expressSession);
 const cookieParser = require('cookie-parser');
 const db = require('./db');
+const config = require('./config.js')
 const hbs = require('hbs');
-const bcrypt = require('bcrypt');
 const url = require('url');
-const saltRounds = 10;
-const uuid = require('uuid');
 
 const mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 const User = mongoose.model('User');
 const Question = mongoose.model('Question');
 const Answer = mongoose.model('Answer');
@@ -37,7 +46,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, "public")));
 app.set('views', path.join(__dirname, "views"));
+app.use(passport.initialize());
+app.use(passport.session());
 
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 function sessions(url, secret) {
   const store = new RedisStore({ url: url });
@@ -51,21 +65,15 @@ function sessions(url, secret) {
   return session;
 };
 
-const redisURL = url.parse(process.env.REDISCLOUD_URL);
-const client = require('redis').createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-client.auth(redisURL.auth.split(":")[1]);
+if (config.NODE_ENV === "production") {
+  const redisURL = url.parse(process.env.REDISCLOUD_URL);
+  const client = require('redis').createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+  client.auth(redisURL.auth.split(":")[1]);
+}
 
 app
   .use(cookieParser(process.env.COOKIE_SECRET))
   .use(sessions(process.env.REDISCLOUD_URL, process.env.COOKIE_SECRET));
-
-app.use(function(req, res, next) {
-  req.session.user = req.session.user || { id: uuid.v1() };
-  req.user = req.session.user;
-  app.locals.user = req.session.user;
-  res.locals.user = req.session.user.username; // undefined if user is fake
-  next();
-});
 
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
@@ -86,9 +94,11 @@ hbs.registerHelper('pluralize', function(number, single, plural) {
 });
 
 app.get('/', function(req, res) {
-  if (req.session && req.session.user.username) { // Check if session exists
+  console.log("success redirected here");
+  if (req.session && req.session.passport.user) { // Check if session exists
+    console.log(req.session);
     // lookup the user in the DB by pulling their email from the session
-    User.findOne({ username: req.session.user.username }, function (err, user) {
+    User.findOne({ username: req.session.passport.user }, function (err, user) {
       if (!user) {
         // if the user isn't found in the DB, reset the session info and
         // redirect the user to the login page
@@ -104,6 +114,7 @@ app.get('/', function(req, res) {
         // expose the user to the template by using res.locals (?)
         res.locals.user = user;
         app.locals.user = user;
+        req.session.user = user;
         Question.find({}, (err, polls) => {
         	if (err) {
         		console.log(err);
@@ -190,6 +201,7 @@ app.post('/vote', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
+  console.log(req.body);
 	res.render('login');
 });
 
@@ -201,35 +213,9 @@ app.get('/register', function(req, res) {
   }
 });
 
-app.post('/login', function(req, res) {
-  const password = req.body.password;
-  const username = req.body.username;
-  User.findOne({ $or: [
-    { username: username }, // user can login using username or email
-    { email: username }
-    ]}, function(err, user) {
-    if (!user) {
-      res.render('login', { error: 'Invalid username or password.' });
-    } else {
-      bcrypt.compare(password, user.password, function(err, result) {
-        if (result) {
-          req.session.regenerate((err) => {
-            if (!err) {
-              console.log('success!');
-              app.locals.user = user;
-              req.session.user = user;
-              res.redirect('/'); 
-            } else {
-              console.log('error'); 
-              res.send('an error occurred, please see the server logs for more information');
-            }
-          });
-        } else {
-          res.render('login', { error: 'Invalid email or password.' });
-        }
-      });
-    }
-  });
+app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }),function(req, res) {
+  console.log("in post route for login", req);
+  res.redirect('/');
 });
 
 app.post('/register', function(req, res) {
@@ -258,35 +244,26 @@ app.post('/register', function(req, res) {
   } else if (taken) {
     res.render('register', {error: 'Username taken.'});
   } else {
-    bcrypt.hash(password, saltRounds, function(err, hash) {
+    User.register(new User({
+      username: username,
+      email: email,
+      gender: gender,
+      birth_date: bd,
+      num_points: 0
+    }), password, function(err, user) {
       if (err) {
-        res.render('register', {error: 'Something happened.'});
-      } else {
-        const user = new User({
-          username: username,
-          password: hash,
-          email: email,
-          gender: gender,
-          birth_date: bd,
-          num_points: 0
-        });
-        user.save(function(err) {
-          if (err) {
-            console.log(err);
-            res.send('an error occurred, please see the server logs for more information');
-          } else {
-            req.session.regenerate((err) => {
-              if (!err) {
-                req.session.user = user;
-                res.redirect('/'); 
-              } else {
-                console.log('error'); 
-                res.send('an error occurred, please see the server logs for more information');
-              }
-            });
-          }
-        });
+        return res.render('register', { error : err.message });
       }
+      passport.authenticate('local')(req, res, function () {
+        console.log("user line 268", user);
+        req.session.user = user;
+        req.session.save(function(err) {
+          if (err) {
+            return next(err);
+          }
+          res.redirect('/');
+        });
+      });
     });
   }
 });
@@ -307,7 +284,7 @@ app.get('/logout', function(req, res) {
 // });
 
 app.get('/favicon.ico', function(req, res) {
-  res.sendFile(path.join(__dirname, "public") + 'images/favicon.ico', function(err) {
+  res.sendFile(path.join(__dirname, "public") + '/images/favicon.ico', function(err) {
     if(err) {
       console.log(err);
     } else {
