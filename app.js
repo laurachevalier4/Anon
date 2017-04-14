@@ -94,7 +94,7 @@ hbs.registerHelper('pluralize', function(number, single, plural) {
 });
 
 app.get('/', function(req, res) {
-  console.log("success redirected here");
+  console.log(req);
   if (req.session.passport && req.session.passport.user) { // Check if session exists
     console.log(req.session);
     // lookup the user in the DB by pulling their email from the session
@@ -201,7 +201,6 @@ app.post('/vote', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-  console.log(req.body);
 	res.render('login');
 });
 
@@ -214,7 +213,6 @@ app.get('/register', function(req, res) {
 });
 
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }),function(req, res) {
-  console.log("in post route for login", req);
   res.redirect('/');
 });
 
