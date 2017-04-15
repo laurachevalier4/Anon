@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
+const config = require('./config.js');
 
 const User = new Schema({
   // use plugin for authentication and password encryption, e.g. mongoose-encryption
@@ -49,4 +50,8 @@ mongoose.model('User', User);
 mongoose.model('Question', Question);
 mongoose.model('Answer', Answer);
 
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/anon'); // get mongodb uri env variable
+if (config.NODE_ENV === "production") {
+  mongoose.connect(process.env.MONGOLAB_URI);
+} else {
+  mongoose.connect('mongodb://localhost/anon'); // get mongodb uri env variable
+}

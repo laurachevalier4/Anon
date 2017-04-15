@@ -21,9 +21,10 @@ const expressSession = require('express-session');
 const RedisStore = require('connect-redis')(expressSession);
 const cookieParser = require('cookie-parser');
 const db = require('./db');
-const config = require('./config.js')
+const config = require('./config.js');
 const hbs = require('hbs');
 const url = require('url');
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const mongoose = require('mongoose');
 var passport = require('passport');
@@ -72,6 +73,7 @@ hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper('userVoted', function(question) {
+  console.log(question._id);
   let voted = false;
   question.answered_by.forEach(function(userId) {
     if (userId.toString() === app.locals.user._id.toString()) {
@@ -186,6 +188,8 @@ app.post('/vote', function(req, res) {
     } else {
       const answer = question.answers.id(req.body.choice);
       answer.voters.push(req.session.user);
+      console.log(answer);
+      console.log(answer.voters);
       answer.save(function(err) {
         if (err) {
           console.log(err);
@@ -288,22 +292,98 @@ app.get('/favicon.ico', function(req, res) {
   });
 });
 
-app.get('/api/users/:question_id', function(req, res) {
-  // get list of users for each answer associated with a question
+app.get('/api/voters/:question_id', function(req, res) {
+  // get list of voters' user_ids for each answer associated with a question
   Question.findOne({_id: req.params.question_id}, function(err, question) {
-    res.json(question.answers.map(function(ans) {
-      return {
-        'text': ans.text,
-        'voters': JSON.stringify(ans.voters.map(function(voter) {
-          return {
-            'username': voter.username,
-            'gender': voter.gender,
-            'birth_date': voter.birth_date,
-          }
-        }))
-      }
-    }));
+    if (err || !question) {
+      res.json("Cannot display this question.");
+    } else {
+      res.json(question.answers.map(function(ans) {
+        return {
+          'id': ans._id,
+          'text': ans.text,
+          'voters': ans.voters
+        }
+      }));
+    }
   });
+});
+
+app.get('/api/users/:user_id', function(req, res) {
+  // get user demo info for a single user
+  // excluding any identifying info
+  User.findOne({_id: req.params.user_id}, function(err, user) {
+    if (err || !user) {
+      res.json("Cannot display this user.");
+    } else {
+      res.json({
+          'gender': user.gender,
+          'age': Math.floor((Date.now() - user.birth_date.getTime()) / 31536000000)
+      });
+    }
+  });
+});
+
+// helper function for getting full url to make AJAX calls
+/*function fullUrl(req) {
+  return url.format({
+    protocol: req.protocol,
+    host: req.get('host'),
+    pathname: req.originalUrl
+  });
+}*/
+
+// example question id: 58f0c163e5546f54c109a3f2
+// local example question id: 58f26ef04328dd79a7b04c5b
+
+app.get('/api/:question_id/voters.json', function(req, res) {
+  // get json object containing voter data for a question 
+  let url = req.protocol + '://' + req.get('host') + '/api/voters/' + req.params.question_id;
+  console.log("url: ", url);
+  const request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.addEventListener('load', function() {
+    if (request.status >= 200 && request.status < 400) {
+      const answers = JSON.parse(request.responseText);
+      console.log(answers);
+      let obj = {}; // object of objects to be returned
+      /* {
+        ans1: {
+          {voter1},
+          {voter2},
+        },
+        answ: {
+          {voter1},
+          {voter2},
+          {voter3}
+        }
+      }
+      */
+      answers.forEach(function(ans) {
+        let text = ans.text;
+        let users = [];
+        ans.voters.forEach(function(user) {
+          url = req.protocol + '://' + req.get('host') + '/api/users/' + user;
+          let request1 = new XMLHttpRequest();
+          request1.open('GET', url, true);
+          request1.addEventListener('load', function() {
+            if (request1.status >= 200 && request1.status < 400) {
+              let user = JSON.parse(request1.responseText);
+              console.log(user);
+              users.push(user);
+            }
+          });  
+          request1.send();
+        });
+        console.log(users); // by the time we get here, users is still empty
+        obj[text] = users; // list of voter objects for each question
+      });
+      res.json(obj);
+    } else {
+      res.json("nope");
+    }
+  });
+  request.send();
 });
 
 
