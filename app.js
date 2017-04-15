@@ -337,12 +337,12 @@ app.get('/api/users/:user_id', function(req, res) {
 // local example question id: 58f26ef04328dd79a7b04c5b
 
 app.get('/api/:question_id/voters.json', function(req, res) {
-  // get json object containing voter data for a question 
+  // get json object containing voter data for a question
   let url = req.protocol + '://' + req.get('host') + '/api/voters/' + req.params.question_id;
   console.log("url: ", url);
   const request = new XMLHttpRequest();
   request.open('GET', url, true);
-  let obj = {}; // object of objects to be returned
+  const obj = {}; // object of objects to be returned
   /* {
     ans1: {
       {voter1},
@@ -355,40 +355,49 @@ app.get('/api/:question_id/voters.json', function(req, res) {
     }
   }
   */
-  request.addEventListener('load', function() {
-    // ideas: 
-    // 1. use promises here so that res.json(obj) is the last thing that is reached (how?)
-    // 2. directly incorporate json data into d3 viz (how?)
-    // 3. is there a way to make it so that answers.forEach has a callback (e.g. by wrapping this logic into a function and have the callback of that function call res.json)
-    if (request.status >= 200 && request.status < 400) {
-      const answers = JSON.parse(request.responseText);
-      console.log(answers);
-      answers.forEach(function(ans) {
-        let text = ans.text;
-        obj[text] = [];
-        ans.voters.forEach(function(user) {
-          url = req.protocol + '://' + req.get('host') + '/api/users/' + user;
-          let request1 = new XMLHttpRequest();
-          request1.open('GET', url, true);
-          request1.addEventListener('load', function() {
-            if (request1.status >= 200 && request1.status < 400) {
-              let user = JSON.parse(request1.responseText);
-              console.log(user);
-              obj[text].push(user);
-              console.log(obj);
-            }
-          });  
-          request1.send();
+  function getVoterInfo() {
+    request.addEventListener('load', function() {
+    // *** use promises here so that res.json(obj) is the last thing that is reached (how?)
+      if (request.status >= 200 && request.status < 400) {
+        const answers = JSON.parse(request.responseText);
+        console.log(answers);
+        answers.forEach(function(ans) {
+          let text = ans.text;
+          obj[text] = [];
+          ans.voters.forEach(function(user) {
+            url = req.protocol + '://' + req.get('host') + '/api/users/' + user;
+            let request1 = new XMLHttpRequest();
+            request1.open('GET', url, true);
+            request1.addEventListener('load', function() {
+              if (request1.status >= 200 && request1.status < 400) {
+                let user = JSON.parse(request1.responseText);
+                console.log(user);
+                obj[text].push(user);
+                console.log(obj);
+              }
+            });  
+            request1.send();
+          });
+          //obj[text] = users; // list of voter objects for each question
         });
-        //obj[text] = users; // list of voter objects for each question
-      });
-      console.log('here');
-      res.json(obj);
-    } else {
-      res.json("nope");
-    }
+      }
+    });
+  }
+
+  function finish() {
+    console.log(obj, "in finish");
+    res.json(obj);
+    request.send();
+  }
+
+  const p = new Promise(function(fulfill, reject) {
+    getVoterInfo();
+    fulfill(obj);
+    reject('sorry');
   });
-  request.send();
+
+  p.then(finish, console.log);
+  
 });
 
 
