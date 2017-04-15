@@ -342,26 +342,30 @@ app.get('/api/:question_id/voters.json', function(req, res) {
   console.log("url: ", url);
   const request = new XMLHttpRequest();
   request.open('GET', url, true);
+  let obj = {}; // object of objects to be returned
+  /* {
+    ans1: {
+      {voter1},
+      {voter2},
+    },
+    answ: {
+      {voter1},
+      {voter2},
+      {voter3}
+    }
+  }
+  */
   request.addEventListener('load', function() {
+    // ideas: 
+    // 1. use promises here so that res.json(obj) is the last thing that is reached (how?)
+    // 2. directly incorporate json data into d3 viz (how?)
+    // 3. is there a way to make it so that answers.forEach has a callback (e.g. by wrapping this logic into a function and have the callback of that function call res.json)
     if (request.status >= 200 && request.status < 400) {
       const answers = JSON.parse(request.responseText);
       console.log(answers);
-      let obj = {}; // object of objects to be returned
-      /* {
-        ans1: {
-          {voter1},
-          {voter2},
-        },
-        answ: {
-          {voter1},
-          {voter2},
-          {voter3}
-        }
-      }
-      */
       answers.forEach(function(ans) {
         let text = ans.text;
-        let users = [];
+        obj[text] = [];
         ans.voters.forEach(function(user) {
           url = req.protocol + '://' + req.get('host') + '/api/users/' + user;
           let request1 = new XMLHttpRequest();
@@ -370,14 +374,15 @@ app.get('/api/:question_id/voters.json', function(req, res) {
             if (request1.status >= 200 && request1.status < 400) {
               let user = JSON.parse(request1.responseText);
               console.log(user);
-              users.push(user);
+              obj[text].push(user);
+              console.log(obj);
             }
           });  
           request1.send();
         });
-        console.log(users); // by the time we get here, users is still empty
-        obj[text] = users; // list of voter objects for each question
+        //obj[text] = users; // list of voter objects for each question
       });
+      console.log('here');
       res.json(obj);
     } else {
       res.json("nope");
