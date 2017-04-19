@@ -355,49 +355,64 @@ app.get('/api/:question_id/voters.json', function(req, res) {
     }
   }
   */
-  function getVoterInfo() {
-    request.addEventListener('load', function() {
-    // *** use promises here so that res.json(obj) is the last thing that is reached (how?)
-      if (request.status >= 200 && request.status < 400) {
-        const answers = JSON.parse(request.responseText);
-        console.log(answers);
-        answers.forEach(function(ans) {
-          let text = ans.text;
-          obj[text] = [];
-          ans.voters.forEach(function(user) {
-            url = req.protocol + '://' + req.get('host') + '/api/users/' + user;
-            let request1 = new XMLHttpRequest();
-            request1.open('GET', url, true);
-            request1.addEventListener('load', function() {
-              if (request1.status >= 200 && request1.status < 400) {
-                let user = JSON.parse(request1.responseText);
-                console.log(user);
-                obj[text].push(user);
-                console.log(obj);
-              }
-            });  
-            request1.send();
-          });
-          //obj[text] = users; // list of voter objects for each question
-        });
-      }
+  // 1) Get all answers (getInfo)
+  // 2) For each answer, get its user id's (doStuff)
+  // 3) For each user_id, get that user's info (getUserInfo)
+  //    And push that user into an array of users in an object of answer: [voters] pairs
+  // 4) When done getting all users, set res.json(obj) and call request.send() on the outermost request
+
+  function getUserInfo(user) {
+    return new Promise(function(fulfill, reject) {
+      url = req.protocol + '://' + req.get('host') + '/api/users/' + user;
+      let request1 = new XMLHttpRequest();
+      request1.open('GET', url, true);
+      request1.addEventListener('load', function() {
+        if (request1.status >= 200 && request1.status < 400) {
+          fulfill(request1);
+        }
+      });  
     });
   }
 
-  function finish() {
-    console.log(obj, "in finish");
-    res.json(obj);
-    request.send();
+  getUserInfo.then(function(request1) {
+    let user = JSON.parse(request1.responseText);
+    console.log(user);
+    obj[text].push(user);
+    console.log(obj);
+  })
+
+  function getInfo() {
+    return new Promise(function(fulfill, reject) {
+      request.addEventListener('load', function() {
+        if (request.status >= 200 && request.status < 400) {
+          const answers = JSON.parse(request.responseText);
+          console.log(answers);
+          fulfill(answers);
+        }
+      });
+    });
   }
 
-  const p = new Promise(function(fulfill, reject) {
-    getVoterInfo();
-    fulfill(obj);
-    reject('sorry');
+  getInfo.then(doStuff);
+
+  function doStuff(answers) {
+    return new Promise(function(fulfill, reject) {
+      answers.forEach(function(ans) {
+        let text = ans.text;
+        obj[text] = [];
+        ans.voters.forEach(getUserInfo(user));  
+        request1.send();
+      });
+      fulfill(obj);
+    });
+  }
+
+  doStuff.then(function(fulfill, reject) {
+    console.log(obj, "in doStuff's then");
+      res.json(obj);
+      request.send();
   });
 
-  p.then(finish, console.log);
-  
 });
 
 
