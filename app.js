@@ -343,6 +343,13 @@ app.get('/api/:question_id/voters.json', function(req, res) {
   const request = new XMLHttpRequest();
   request.open('GET', url, true);
   const obj = {}; // object of objects to be returned
+  getInfo()
+    .then(doStuff)
+    .then(function(fulfill, reject) {
+      console.log(obj, "in doStuff's then");
+      res.json(obj);
+      request.send();
+    });
   /* {
     ans1: {
       {voter1},
@@ -370,16 +377,10 @@ app.get('/api/:question_id/voters.json', function(req, res) {
         if (request1.status >= 200 && request1.status < 400) {
           fulfill(request1);
         }
-      });  
+      });
+      request1.send();  
     });
   }
-
-  getUserInfo.then(function(request1) {
-    let user = JSON.parse(request1.responseText);
-    console.log(user);
-    obj[text].push(user);
-    console.log(obj);
-  })
 
   function getInfo() {
     return new Promise(function(fulfill, reject) {
@@ -393,25 +394,21 @@ app.get('/api/:question_id/voters.json', function(req, res) {
     });
   }
 
-  getInfo.then(doStuff);
-
   function doStuff(answers) {
     return new Promise(function(fulfill, reject) {
       answers.forEach(function(ans) {
         let text = ans.text;
         obj[text] = [];
-        ans.voters.forEach(getUserInfo(user));  
-        request1.send();
+        ans.voters.forEach(getUserInfo(user).then(function(request1) {
+          let user = JSON.parse(request1.responseText);
+          console.log(user);
+          obj[text].push(user);
+          console.log(obj);
+        }));  
       });
       fulfill(obj);
     });
   }
-
-  doStuff.then(function(fulfill, reject) {
-    console.log(obj, "in doStuff's then");
-      res.json(obj);
-      request.send();
-  });
 
 });
 
