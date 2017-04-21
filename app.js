@@ -278,8 +278,9 @@ app.post('/register', function(req, res) {
 
 app.get('/logout', function(req, res) {
   res.locals.user = null;
-  req.logout();
-  res.redirect('/login');
+  req.session.destroy(function (err) {
+    res.redirect('/login');
+  });
 });
 
 app.get('/favicon.ico', function(req, res) {
