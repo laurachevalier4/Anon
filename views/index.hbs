@@ -1,5 +1,3 @@
-<!--<script src="/js/pie.js"></script>
-<script src="/js/d3.min.js"></script>-->
 
 {{#if polls}}
     <ul style="margin-top: 2em;">
@@ -7,7 +5,7 @@
     <!-- Need to add check of whether or not the user has answered this question -->
       <div class="question-detail">
         <div class="question-text">
-          <h1>{{ poll.text }}</h1>
+          <h1>{{poll.text}}</h1>
         </div>
         {{#if (userVoted poll)}}
           <div class="options results">
@@ -19,7 +17,8 @@
           </div>
           <div class="viz">
           <p>Placeholder for visualization (still need to figure out how to get data as json dynamically):</p>
-            <svg width="200" height="200"></svg>
+            <svg id={{poll._id}} width="200" height="200"></svg>
+            {{drawChart poll._id}}
           </div>
         {{else}}
           <form class="vote-form" action="/vote" method="POST">
@@ -51,9 +50,14 @@
 {{/if}}
 </div>
 
+<script src="/js/pie.js"></script>
+<script src="/js/d3.min.js"></script>
+<script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+
 <!-- Shouldn't need to reload jquery here... loaded in base.html -->
 <script src="/js/jquery.min.js"></script>
 <script>
+
 /*$(document).ready(function () {
   var question_id = "{{ view.question_id }}";
   var error_msg="{{ error_message }}";
@@ -65,4 +69,5 @@
     $(document).scrollTop(position-100);
   }
 });*/
+
 </script>

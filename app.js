@@ -27,12 +27,17 @@ const url = require('url');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const mongoose = require('mongoose');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const User = mongoose.model('User');
 const Question = mongoose.model('Question');
 const Answer = mongoose.model('Answer');
 const ObjectId = mongoose.Types.ObjectId;
+
+const pie = require('./public/js/pie.js');
+const d3 = require("d3");
+const jsdom = require("node-jsdom");
+// const document = jsdom.jsdom();
 
 const app = express();
 
@@ -73,7 +78,6 @@ hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartial('detail', '{{detail}}');
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 hbs.registerHelper('userVoted', function(question) {
-  console.log(question._id);
   let voted = false;
   question.answered_by.forEach(function(userId) {
     if (userId.toString() === app.locals.user._id.toString()) {
@@ -88,10 +92,62 @@ hbs.registerHelper('pluralize', function(number, single, plural) {
   else { return plural; }
 });
 
+hbs.registerHelper('drawChart', function(question_id) {
+  var graph = function (question_id) {
+    console.log(question_id);
+    var svg = d3.select(document.body).append("svg"); // individual svg has id #question_id
+    svg.attr("id", question_id);
+
+    console.log("in pie.js");
+    var width = +svg.attr("width"),
+        height = +svg.attr("height"),
+        radius = Math.min(width, height) / 2,
+        g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var color = d3.scaleOrdinal(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    var pie = d3.pie()
+        .sort(null)
+        .value(function(d) { return d.population; });
+
+    var path = d3.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+
+    var label = d3.arc()
+        .outerRadius(radius - 40)
+        .innerRadius(radius - 40);
+
+    // need to change this so it's not hardcoded as
+    d3.json("http://localhost:5000/api/" + question_id + "/voters.json", function(d) {
+      console.log(d);
+      d.population = +d.population;
+      return d;
+    }, function(error, data) {
+      if (error) throw error;
+
+      var arc = g.selectAll(".arc")
+        .data(pie(data))
+        .enter().append("g")
+          .attr("class", "arc");
+
+      arc.append("path")
+          .attr("d", path)
+          .attr("fill", function(d) { return color(d.data.age); });
+
+      arc.append("text")
+          .attr("transform", function(d) { return "translate(" + label.centroid(d) + ")"; })
+          .attr("dy", "0.35em")
+          .text(function(d) { return d.data.age; });
+    });
+
+    return hbs.SafeString(svg.html());
+  };
+  return graph;
+});
+
 app.get('/', function(req, res) {
-  console.log(req);
   if (req.session.passport && req.session.passport.user) { // Check if session exists
-    console.log(req.session);
     // lookup the user in the DB by pulling their email from the session
     User.findOne({ username: req.session.passport.user }, function (err, user) {
       if (!user) {
@@ -110,7 +166,6 @@ app.get('/', function(req, res) {
         res.locals.user = user;
         app.locals.user = user;
         req.session.user = user;
-        console.log("req.session.user", req.session.user);
         Question.find({}, (err, polls) => {
         	if (err) {
         		console.log(err);
@@ -188,8 +243,6 @@ app.post('/vote', function(req, res) {
     } else {
       const answer = question.answers.id(req.body.choice);
       answer.voters.push(req.session.user);
-      console.log(answer);
-      console.log(answer.voters);
       answer.save(function(err) {
         if (err) {
           console.log(err);
@@ -340,7 +393,6 @@ app.get('/api/users/:user_id', function(req, res) {
 app.get('/api/:question_id/voters.json', function(req, res) {
   // get json object containing voter data for a question
   let url = req.protocol + '://' + req.get('host') + '/api/voters/' + req.params.question_id;
-  console.log("url: ", url);
   const request = new XMLHttpRequest();
   request.open('GET', url, true);
   const obj = {}; // object of objects to be returned
@@ -374,13 +426,11 @@ app.get('/api/:question_id/voters.json', function(req, res) {
       request.addEventListener('load', function() {
         if (request.status >= 200 && request.status < 400) {
           const answers = JSON.parse(request.responseText);
-          console.log("answers:", answers);
           fulfill(answers);
         } else {
           console.log("ERROR", request.status);
         }
       });
-      console.log("sending request");
       request.send();
     });
   }
@@ -415,7 +465,6 @@ app.get('/api/:question_id/voters.json', function(req, res) {
     });
 
     return Promise.all(userInfo).then(info => {
-      console.log(info);
       res.json(info[0]); 
       // not sure why info is multiple of the same objects but should figure that out... in the meantime, it works!
     }, () => {
