@@ -344,13 +344,12 @@ app.get('/api/:question_id/voters.json', function(req, res) {
   request.open('GET', url, true);
   const obj = {}; // object of objects to be returned
   getInfo()
-    .then(doStuff)
-    .then(function(fulfill, reject) {
-      console.log(obj, "in doStuff's then");
-      res.json(obj);
-      request.send();
+    .then(doStuff, function() {
+      console.log("Something went wrong, not executing doStuff()");
     });
-  /* {
+  /* 
+  The jsonified data will look like this:
+  {
     ans1: {
       {voter1},
       {voter2},
@@ -361,12 +360,67 @@ app.get('/api/:question_id/voters.json', function(req, res) {
       {voter3}
     }
   }
-  */
+  */ 
+  // What's going on???
   // 1) Get all answers (getInfo)
   // 2) For each answer, get its user id's (doStuff)
   // 3) For each user_id, get that user's info (getUserInfo)
   //    And push that user into an array of users in an object of answer: [voters] pairs
-  // 4) When done getting all users, set res.json(obj) and call request.send() on the outermost request
+  // 4) When done getting all users, set res.json(obj)
+
+  function getInfo() {
+    return new Promise(function(fulfill, reject) {
+      request.addEventListener('load', function() {
+        if (request.status >= 200 && request.status < 400) {
+          const answers = JSON.parse(request.responseText);
+          console.log("answers:", answers);
+          fulfill(answers);
+        } else {
+          console.log("ERROR", request.status);
+        }
+      });
+      console.log("sending request");
+      request.send();
+    });
+  }
+
+  function doStuff(answers) {
+    let userInfo = answers.map(function(ans) {
+      return new Promise(function (fulfill, reject) {
+        let text = ans.text;
+        obj[text] = [];
+
+        let voters = ans.voters.map(function(user) {
+          return new Promise(function (resolve, deny) {
+            getUserInfo(user).then(
+              function(request1) {
+                let user = JSON.parse(request1.responseText);
+                resolve(user);
+                deny(user)
+              }, function() {
+                console.log("Something went wrong, not executing function(request1)");
+            });
+          });
+        });  
+
+        Promise.all(voters).then(users => {
+          users.forEach(user => {
+            obj[text].push(user);
+          });
+          fulfill(obj);
+          reject(obj);
+        }, () => { console.log("no go."); });
+      });
+    });
+
+    return Promise.all(userInfo).then(info => {
+      console.log(info);
+      res.json(info[0]); 
+      // not sure why info is multiple of the same objects but should figure that out... in the meantime, it works!
+    }, () => {
+      console.log("failure");
+    });
+  }
 
   function getUserInfo(user) {
     return new Promise(function(fulfill, reject) {
@@ -376,37 +430,11 @@ app.get('/api/:question_id/voters.json', function(req, res) {
       request1.addEventListener('load', function() {
         if (request1.status >= 200 && request1.status < 400) {
           fulfill(request1);
+        } else {
+          reject();
         }
       });
-      request1.send();  
-    });
-  }
-
-  function getInfo() {
-    return new Promise(function(fulfill, reject) {
-      request.addEventListener('load', function() {
-        if (request.status >= 200 && request.status < 400) {
-          const answers = JSON.parse(request.responseText);
-          console.log(answers);
-          fulfill(answers);
-        }
-      });
-    });
-  }
-
-  function doStuff(answers) {
-    return new Promise(function(fulfill, reject) {
-      answers.forEach(function(ans) {
-        let text = ans.text;
-        obj[text] = [];
-        ans.voters.forEach(getUserInfo(user).then(function(request1) {
-          let user = JSON.parse(request1.responseText);
-          console.log(user);
-          obj[text].push(user);
-          console.log(obj);
-        }));  
-      });
-      fulfill(obj);
+      request1.send(); 
     });
   }
 
