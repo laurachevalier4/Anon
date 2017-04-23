@@ -125,7 +125,11 @@ app.get('/', function(req, res) {
 });
 
 app.get('/ask', function(req, res) {
-	res.render('ask');
+  if (req.session.passport && req.session.passport.user) { // Check if session exists
+	 res.render('ask');
+  } else {
+    res.redirect('/login');
+  }
 });
 
 app.post('/ask', function(req, res) {
