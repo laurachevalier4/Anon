@@ -149,3 +149,13 @@ h1 {
 .midwidth {
   width: 80%;
 }
+
+/* CHART STYLES */
+
+.viz {
+  text-align: center;
+}
+
+.charttext {
+  font-size: .5em;
+}
