@@ -51,11 +51,12 @@ body {
   font-family: 'Prata', serif;
   color: #333;
   text-decoration: none;
+  transition: color 0.1s ease;
 }
 
 .nav-list a:hover {
   text-decoration: none;
-  color: #555;
+  color: #fff;
 }
 
 ul {
@@ -154,6 +155,7 @@ h1 {
 
 .viz {
   text-align: center;
+  cursor: pointer;
 }
 
 .charttext {
