@@ -116,7 +116,7 @@ hbs.registerHelper('drawChart', function(question_id) {
       .innerRadius(radius - 40);
 
   // need to change this so it's not hardcoded as
-  THICC = d3.json("http://localhost:5000/api/" + question_id + "/voters.json", function(error, data) {
+  var graph = d3.json("http://localhost:5000/api/" + question_id + "/voters.json", function(error, data) {
     console.log("data in d3.json", data);
     data = [data];
     let f = function(d) {
@@ -150,8 +150,8 @@ hbs.registerHelper('drawChart', function(question_id) {
     console.log("svg html", svg.html());
     return svg.html();
   });
-  console.log(THICC);
-  return THICC;
+  console.log(graph);
+  return graph;
 
   // these lines get called before the json callback completes...
   // how can I return svg.html() to the helper only AFTER d3.json() is done executing?
