@@ -101,6 +101,7 @@ app.get('/', function(req, res) {
             res.send(err);
           }
           else {
+            res.locals.user = null;
             res.redirect(302, '/login');
           }
         });
@@ -126,7 +127,8 @@ app.get('/', function(req, res) {
 
 app.get('/ask', function(req, res) {
   if (req.session.passport && req.session.passport.user) { // Check if session exists
-	 res.render('ask');
+    res.locals.user = req.session.passport.user;
+	  res.render('ask');
   } else {
     res.redirect('/login');
   }
