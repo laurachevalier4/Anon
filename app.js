@@ -1,5 +1,6 @@
 /*
 TODO:
+  // add ability to add another answer (more than 2...) but set limit (e.g. max 5 options)
   // rewrite api functions to get directly from database rather than making an http request to another endpoint
   // display data visualization when a user has already voted for a question
     // add option 'See Results' so that data will be loaded on click rather than for every one on the page?
@@ -12,6 +13,7 @@ TODO:
     // one for questions answered
   // sort questions so that most recent appears at top
   // IDEA: instead of using pie charts, use a tree/bubble chart or interactive pie chart where once you click on the answer you want to investigate, it gives you further breakdown of how the demographics are divided among people who chose that answer; do something else if you want to highlight how demographics are split across different answers rather than within the same... but similar idea
+    // a tree where roots are answers -- each answer stems into categories: gender, education, etc. which you can click on to see the percentage of that demo who voted for that answer (but then you would have to click on multiple roots to compare across answers) https://bl.ocks.org/mbostock/4339083
 */
 
 const express = require('express');
