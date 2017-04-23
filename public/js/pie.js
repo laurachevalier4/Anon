@@ -1,7 +1,3 @@
-var d3 = require("d3");
-var jsdom = require("node-jsdom");
-var document = jsdom.jsdom();
-
 function drawChart(question_id) {
   console.log(question_id);
   var svg = d3.select(document.body).append("svg"); // individual svg has id #question_id
@@ -52,7 +48,3 @@ function drawChart(question_id) {
 
   return svg.html();
 };
-
-module.exports = {
-  drawChart
-}
