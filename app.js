@@ -1,17 +1,17 @@
 /*
 TODO:
+  // rewrite api functions to get directly from database rather than making an http request to another endpoint
   // display data visualization when a user has already voted for a question
-    // add option 'See Results' so that data will be loaded on click rather than for every one on the page
+    // add option 'See Results' so that data will be loaded on click rather than for every one on the page?
     // default to showing results for the one just voted on and displaying 'Show Results' option for all others voted on beforehand (in another session?)
-    // only be able to vote once per question
   // label a user's questions "your question" or some identifier
   // upvoting questions
   // ability to bookmark questions; AND/OR...
   // dashboard 
     // one page for questions asked
     // one for questions answered
-  // scroll to the poll a user just voted on after rerendering index
   // sort questions so that most recent appears at top
+  // IDEA: instead of using pie charts, use a tree/bubble chart or interactive pie chart where once you click on the answer you want to investigate, it gives you further breakdown of how the demographics are divided among people who chose that answer; do something else if you want to highlight how demographics are split across different answers rather than within the same... but similar idea
 */
 
 const express = require('express');
@@ -111,7 +111,7 @@ app.get('/', function(req, res) {
         	if (err) {
         		console.log(err);
         	} else {
-        		res.render('index', {polls: polls, err: res.locals.err});
+        		res.render('index', {polls: polls, err: res.locals.err, prod: config.NODE_ENV === "production"});
         	}
         });
       }

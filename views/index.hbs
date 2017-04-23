@@ -16,7 +16,7 @@
             {{/each}}
           </div>
           <div class="viz">
-            <svg id="svg{{poll._id}}" width="300" height="300"></svg>
+            <svg id="svg{{poll._id}}" width="100%" height="400"></svg>
           </div>
         {{else}}
           <form class="vote-form" action="/vote" method="POST">
@@ -61,19 +61,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   svgs = Array.prototype.slice.call(svgs);
   console.log(svgs);
   svgs.forEach(function(svg) {
-    drawChart($(svg).attr('id'));
+    drawChart($(svg).attr('id'), {{prod}});
   });
 });
-/*$(document).ready(function () {
-  var question_id = "{{ view.question_id }}";
-  var error_msg="{{ error_message }}";
-  if (error_msg) { // jump to correct question when user gives no answer
-    question_id = "{{ question_id }}";
-  }
-  if (!isNaN(question_id) && question_id) {
-    var position = $('#' + question_id).position().top;
-    $(document).scrollTop(position-100);
-  }
-});*/
 
 </script>
