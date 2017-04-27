@@ -128,7 +128,7 @@ hr {
   font-size: .9em;
 }
 
-.question-form input[type="submit"] {
+.question-form input[type="submit"], .question-form button {
   height: 3em;
   width: 100%;
   outline: 0;
@@ -137,9 +137,22 @@ hr {
   background-color: #538;
 }
 
-.question-form input[type="submit"]:hover {
+.question-form input[type="submit"]:hover, .question-form button:hover {
   cursor: pointer;
   opacity: .8;
+}
+
+#add-choice {
+  margin-bottom: 1em;
+}
+
+.remove-field {
+  color: #333;
+  text-decoration: none;
+}
+
+.remove-field:hover, .remove-field:active {
+  color: #777;
 }
 
 #question-label {

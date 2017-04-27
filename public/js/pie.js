@@ -100,10 +100,10 @@ function drawChart(question_id, prod) {
               if (gender.gender === "F") {
                 describe+="<p>" + gender.percent.toFixed(1) + "%" + " Female</p>";
               } else {
-                describe+="<p>" + gender.percent.toFixed(1) + "%" + "Male</p>";
+                describe+="<p>" + gender.percent.toFixed(1) + "%" + " Male</p>";
               }
-              describe+="<p>Average age: " + avgAge.toFixed(1) + "</p>";
-            })
+            });
+            describe+="<p>Average age: " + avgAge.toFixed(1) + "</p>";
             return describe; 
           })
             .style("top", function () {
