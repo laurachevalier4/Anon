@@ -65,6 +65,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
   svgs.forEach(function(svg) {
     drawChart($(svg).attr('id'), {{prod}});
   });
+
+  $(window).scroll(function() {
+    d3.select("#tooltip")
+      .style("visibility", "hidden");
+  });
 });
 
 </script>
