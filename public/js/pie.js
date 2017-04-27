@@ -11,7 +11,8 @@ function drawChart(question_id, prod) {
 
   var pie = d3.pie()
       .sort(null)
-      .value(function(d) { console.log(d); 
+      .value(function(d) { 
+        console.log(d); 
         if (d.voters) {
           return d.voters.length;
         } else {
@@ -37,9 +38,16 @@ function drawChart(question_id, prod) {
     });
     genderList = [];
     Object.keys(genders).forEach(function(el) {
-      genderList.push({ "gender": el, "count": genders[el] });
+      genderList.push({ "gender": el, "count": genders[el], "percent": genders[el]/voters.length * 100 });
     });
     return genderList;
+  }
+
+  function averageAge(voters) {
+    var ageSum = voters.reduce(function(acc, voter) {
+      return acc + voter.age;
+    }, 0);
+    return ageSum / voters.length;
   }
 
   var url;
@@ -58,13 +66,13 @@ function drawChart(question_id, prod) {
         .data(pie(mydata))
         .enter().append("g")
           .attr("class", "arc")
-          // .each(function(d, i) {
-          //   this.data = d.data;
-          // });
 
       arc
         .append("path")
         .attr("d", path)
+        .attr("id", function(d) {
+          console.log(d);
+        })
         .attr("fill", function(d, i) { console.log(d); return color(i); })
 
       arc
@@ -75,36 +83,44 @@ function drawChart(question_id, prod) {
     }
 
     function onMouseover(sector) {
-      console.log(sector);
-      console.log("mousing over", sector.data.voters); // this.data.data.voters
-      // want to change the outline of the sector
-      // and make the tooltip appear
+      console.log(this);
+      d3.select(this)
+        .select("path")
+        .style("stroke", "white")
+        .style("stroke-width", "1.5px");
 
       d3.select("#tooltip")
         .style('visibility', 'visible')
           .html(() => { 
             var describe = "";
             var genderData = countGenders(sector.data.voters);
-            console.log(genderData);
+            var avgAge = averageAge(sector.data.voters);
             describe+="<h3>" + sector.data.answer + "</h3>"
-            describe+="<p>Voters by Gender:</p>"
             genderData.forEach(function(gender) {
-              describe+="<p>" + gender.gender + ": " + gender.count + "</p>";
+              if (gender.gender === "F") {
+                describe+="<p>" + gender.percent.toFixed(1) + "%" + " Female</p>";
+              } else {
+                describe+="<p>" + gender.percent.toFixed(1) + "%" + "Male</p>";
+              }
+              describe+="<p>Average age: " + avgAge.toFixed(1) + "</p>";
             })
             return describe; 
           })
             .style("top", function () {
               console.log(sector);
-                return $("#"+question_id).offset().top + 20 + 'px';
+              return d3.event.pageY - 20 + "px"/*$("#"+question_id).offset().top + 20 + 'px'*/;
             })
             .style("left", function () {
-              return $("#"+question_id).offset().left + 'px';
+              return d3.event.pageX - 20 + 'px';
             })
             .style('font-size', '1em')
             .style('font-family', 'Old Standard TT, serif');
     }
 
     function onMouseout() {
+      d3.select(this)
+        .select("path")
+        .style("stroke", "none");
       d3.select("#tooltip")
         .style('visibility', 'hidden');
     }
@@ -139,7 +155,8 @@ function drawChart(question_id, prod) {
       d.answers = d.answers.map(function(ans) {
         return {
           "answer": ans,
-          "voters": d[ans]
+          "voters": d[ans].slice(1),
+          "id": d[ans][0].id
         };
       });
     });

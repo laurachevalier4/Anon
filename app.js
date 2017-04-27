@@ -13,6 +13,7 @@ TODO:
   // sort questions so that most recent appears at top
   // IDEA: instead of using pie charts, use a tree/bubble chart or interactive pie chart where once you click on the answer you want to investigate, it gives you further breakdown of how the demographics are divided among people who chose that answer; do something else if you want to highlight how demographics are split across different answers rather than within the same... but similar idea
     // a tree where roots are answers -- each answer stems into categories: gender, education, etc. which you can click on to see the percentage of that demo who voted for that answer (but then you would have to click on multiple roots to compare across answers) https://bl.ocks.org/mbostock/4339083
+  // better form validation
 */
 
 const express = require('express');
@@ -386,9 +387,11 @@ app.get('/api/:question_id/voters.json', function(req, res) {
   function doStuff(answers) {
     console.log(answers);
     let userInfo = answers.map(function(ans) {
+      console.log(ans);
       return new Promise(function (fulfill, reject) {
         let text = ans.text;
         obj[text] = [];
+        obj[text].push({"id": ans.id});
 
         let voters = ans.voters.map(function(user) {
           return new Promise(function (resolve, deny) {
