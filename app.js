@@ -2,9 +2,8 @@
 TODO:
   // add ability to add another answer (more than 2...) but set limit (e.g. max 5 options)
   // rewrite api functions to get directly from database rather than making an http request to another endpoint
-  // display data visualization when a user has already voted for a question
-    // add option 'See Results' so that data will be loaded on click rather than for every one on the page?
-    // default to showing results for the one just voted on and displaying 'Show Results' option for all others voted on beforehand (in another session?)
+  // add option 'See Results' so that data will be loaded on click rather than for every one on the page?
+  // default to showing results for the one just voted on and displaying 'Show Results' option for all others voted on beforehand (in another session?)
   // label a user's questions "your question" or some identifier
   // upvoting questions
   // ability to bookmark questions; AND/OR...

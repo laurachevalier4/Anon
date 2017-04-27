@@ -1,5 +1,6 @@
 
 {{#if polls}}
+    <div id="tooltip"></div>
     <ul style="margin-top: 2em;">
     {{#each polls as |poll|}}
     <!-- Need to add check of whether or not the user has answered this question -->
@@ -64,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   svgs.forEach(function(svg) {
     drawChart($(svg).attr('id'), {{prod}});
   });
-  //drawChart();
 });
 
 </script>

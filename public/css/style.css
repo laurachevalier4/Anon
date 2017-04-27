@@ -145,3 +145,24 @@ hr {
 #question-label {
   font-size: 1.1em;
 }
+
+/* CHART STYLES */
+#tooltip {
+  color: white;
+  opacity: .8;
+  background: #666;
+  padding: 3px;
+  padding-left: 10px;
+  border: 1px solid white;
+  border-radius: 5px;
+  position: absolute;
+  width: 9em;
+  z-index: 20;
+  visibility: hidden;
+  pointer-events: none;
+  white-space: pre-wrap;      /* CSS3 */   
+  white-space: -moz-pre-wrap; /* Firefox */    
+  white-space: -pre-wrap;     /* Opera <7 */   
+  white-space: -o-pre-wrap;   /* Opera 7 */    
+  word-wrap: break-word;
+}
