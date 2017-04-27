@@ -29,6 +29,10 @@ input.btn-vote {
   margin-top: 10em;
 }
 
+.submit-button {
+  width: 25%;
+}
+
 /******* OVERWRITE LOGIN STYLES *******/
 .login-form {
   margin: auto;
