@@ -1,46 +1,7 @@
 @import './base.css';
 @import './style.css';
+@import './mobile.css';
 
-.body {
-  margin-top: 3em;
-  margin-left: 1em;
-  width: 80%;
-  margin: auto;
-}
-
-.question-text {
-  font-size: 2em;
-  color: #552255;
-  clear: both;
-}
-
-.question-detail, form, .results {
-  background: rgba(255, 255, 255, .6);
-  padding: 1em;
-  margin-right: 2em;
-  font-family: 'Dosis', sans-serif;
-  font-size: 1.1em;
-}
-
-#container {
-  width: 100%;
-  padding-top: 60px; /* push image down below nav bar */
-}
-
-ul {
-  list-style-type: none;
-  margin-left: 0;
-  padding-left: 0;
-}
-
-li {
-  font-family: Raleway, Helvetica, sans-serif;
-  font-size: 1em;
-  line-height: 1.2em;
-  font-weight: normal;
-}
-
-/********* OVERWRITE LOGIN STYLING *********/
-.login-form {
-  width: 80%;
+.charttext {
+  display: block;
 }

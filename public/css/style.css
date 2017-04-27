@@ -72,18 +72,18 @@ body {
   margin: auto;
   font-family: 'Prata', serif;
   font-size: 1em;
-  background: rgba(255, 255, 255, .7);
+  background: rgba(255, 255, 255, .6);
 }
 
 .question-detail {
   border: 2px solid white;
-  background: rgba(255, 255, 255, .8);
+  background: rgba(255, 255, 255, .7);
   box-shadow: 0px 0px 10px #ccc;
   transition: background-color 0.2s ease;
 }
 
 .question-detail:hover {
-  background: rgba(255, 255, 255, .9);
+  background: rgba(255, 255, 255, .8);
 }
 
 .question-info {
