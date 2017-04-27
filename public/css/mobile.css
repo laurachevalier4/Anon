@@ -37,3 +37,7 @@ input.btn-vote {
 .login-form {
   margin: auto;
 }
+
+svg {
+  height: 300px;
+}
