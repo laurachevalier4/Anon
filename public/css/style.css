@@ -2,7 +2,7 @@ body {
   color: #333;
   margin: auto;
   margin-top: 3em;
-  width: 60%;
+  width: 90%;
 }
 
 .question-text {
@@ -10,7 +10,7 @@ body {
   font-size: 2em;
   color: #333;
   clear: both;
-  font-family: 'Old Standard TT', serif;
+  font-family: 'Buda', cursive;
   margin-top: .5em;
 }
 
@@ -35,7 +35,8 @@ body {
   padding: 1em;
   margin-bottom: .5em;
   margin-top: .5em;
-  border: 2px solid white;
+  /* border: 2px solid white; */
+  box-shadow: 0px 0px 10px #ccc;
 }
 
 .results {
@@ -51,7 +52,7 @@ body {
   margin-top: .5em;
   border: 1px solid #ddd;
   padding: .5em;
-  font-family: 'Prata', serif;
+  font-family: 'Buda', cursive;
   font-size: 1em;
 }
 
@@ -70,13 +71,13 @@ body {
 .question-detail, .results {
   padding: 1em;
   margin: auto;
-  font-family: 'Prata', serif;
+  font-family: 'Buda', cursive;
   font-size: 1em;
   background: rgba(255, 255, 255, .6);
 }
 
 .question-detail {
-  border: 2px solid white;
+  /* border: 2px solid white; */
   background: rgba(255, 255, 255, .7);
   box-shadow: 0px 0px 10px #ccc;
   transition: background-color 0.2s ease;
@@ -93,7 +94,7 @@ body {
 
 .results, .results ul li {
   font-size: 1em;
-  font-family: 'Prata', serif;
+  font-family: 'Buda', cursive;
 
 }
 
@@ -120,11 +121,11 @@ hr {
   margin: auto;
   margin-top: 10%;
   padding: 1em;
-  border: 3px solid white;
+  /* border: 3px solid white; */
 }
 
 .question-form * {
-  font-family: 'Prata', serif;
+  font-family: 'Buda', cursive;
   font-size: .9em;
 }
 

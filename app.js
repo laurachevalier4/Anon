@@ -4,6 +4,7 @@ TODO:
   // rewrite api functions to get directly from database rather than making an http request to another endpoint
   // add option 'See Results' so that data will be loaded on click rather than for every one on the page?
   // default to showing results for the one just voted on and displaying 'Show Results' option for all others voted on beforehand (in another session?)
+    // Make results load on click and make an Ajax call to update page without reloading after user votes (rather than refresh and scroll down)
   // label a user's questions "your question" or some identifier
   // upvoting questions
   // ability to bookmark questions; AND/OR...
@@ -15,6 +16,8 @@ TODO:
     // a tree where roots are answers -- each answer stems into categories: gender, education, etc. which you can click on to see the percentage of that demo who voted for that answer (but then you would have to click on multiple roots to compare across answers) https://bl.ocks.org/mbostock/4339083
   // better form validation
   // make chart text labels overflow onto new line if out of box
+  // Make a tutorial for Anon where the question is the same asked for everyone when they first join and it is a good but not-too-serious representation of what kinds of questions should be asked
+  // With every question, increment the number of points required to ask again, like leveling up a gag in Toontown. But have it reset after a few questions so it isn't terribly annoying.
 */
 
 const express = require('express');
