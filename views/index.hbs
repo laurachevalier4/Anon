@@ -62,7 +62,6 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   var svgs = document.getElementsByTagName('svg'); 
   svgs = Array.prototype.slice.call(svgs);
-  console.log(svgs);
   svgs.forEach(function(svg) {
     drawChart($(svg).attr('id'), {{prod}});
   });

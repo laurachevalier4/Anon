@@ -12,7 +12,6 @@ function drawChart(question_id, prod) {
   var pie = d3.pie()
       .sort(null)
       .value(function(d) { 
-        console.log(d); 
         if (d.voters) {
           return d.voters.length;
         } else {
@@ -58,8 +57,6 @@ function drawChart(question_id, prod) {
   }
   d3.json(url + question_id.slice(3) + "/voters.json", function(error, data) {
     function draw(mydata) {
-      console.log(mydata);
-      console.log("drawing");
       if (error) throw error;
 
       var arc = g.selectAll(".arc")
@@ -71,9 +68,8 @@ function drawChart(question_id, prod) {
         .append("path")
         .attr("d", path)
         .attr("id", function(d) {
-          console.log(d);
         })
-        .attr("fill", function(d, i) { console.log(d); return color(i); })
+        .attr("fill", function(d, i) { return color(i); })
 
       arc
         .on("mouseover", onMouseover)
@@ -83,7 +79,6 @@ function drawChart(question_id, prod) {
     }
 
     function onMouseover(sector) {
-      console.log(this);
       d3.select(this)
         .select("path")
         .style("stroke", "white")
@@ -107,7 +102,6 @@ function drawChart(question_id, prod) {
             return describe; 
           })
             .style("top", function () {
-              console.log(sector);
               return d3.event.pageY - 20 + "px"/*$("#"+question_id).offset().top + 20 + 'px'*/;
             })
             .style("left", function () {
@@ -128,7 +122,6 @@ function drawChart(question_id, prod) {
     function appendText(arc) {
       arc.append("text") // angles taken from http://stackoverflow.com/questions/8053424/label-outside-arc-pie-chart-d3-js
         .attr("transform", function(d) { 
-          console.log(d);
           var c = label.centroid(d), x = c[0], y = c[1],
           // pythagorean theorem for hypotenuse
           h = Math.sqrt(x*x + y*y);

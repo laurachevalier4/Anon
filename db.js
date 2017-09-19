@@ -39,7 +39,7 @@ const Question = new Schema({
   asked_by: {type: Schema.Types.ObjectId, ref: 'User'},
   answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}],
   answers: [Answer],
-  created: { type: Date, default: Date.now }
+  created: {type: Date, default: Date.now}
 });
 
 // for future completion (or if I have time): include Comments

@@ -1,6 +1,5 @@
 /*
 TODO:
-  // add ability to add another answer (more than 2...) but set limit (e.g. max 5 options)
   // rewrite api functions to get directly from database rather than making an http request to another endpoint
   // add option 'See Results' so that data will be loaded on click rather than for every one on the page?
   // default to showing results for the one just voted on and displaying 'Show Results' option for all others voted on beforehand (in another session?)
@@ -19,6 +18,9 @@ TODO:
   // make chart text labels overflow onto new line if out of box
   // Make a tutorial for Anon where the question is the same asked for everyone when they first join and it is a good but not-too-serious representation of what kinds of questions should be asked
   // With every question, increment the number of points required to ask again, like leveling up a gag in Toontown. But have it reset after a few questions so it isn't terribly annoying.
+
+DONE:
+  // add ability to add another answer (more than 2...) but set limit (e.g. max 5 options)
 */
 
 const express = require('express');
@@ -115,7 +117,8 @@ app.get('/', function(req, res) {
         res.locals.user = user;
         app.locals.user = user;
         req.session.user = user;
-        Question.find({}, (err, polls) => {
+        Question.find().sort({created: -1}).limit(10).exec((err, polls) => {
+          console.log("polls:", polls);
         	if (err) {
         		console.log(err);
         	} else {
@@ -153,7 +156,6 @@ app.post('/ask', function(req, res) {
 			answer.save();
 		}
 	}
-  console.log("req.session.user", req.session.user);
 	let question = new Question({
 		_id: id, // use ObjectId to generate new id
 		text: req.body.question,
@@ -390,9 +392,7 @@ app.get('/api/:question_id/voters.json', function(req, res) {
   }
 
   function doStuff(answers) {
-    console.log(answers);
     let userInfo = answers.map(function(ans) {
-      console.log(ans);
       return new Promise(function (fulfill, reject) {
         let text = ans.text;
         obj[text] = [];
