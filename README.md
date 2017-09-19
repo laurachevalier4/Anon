@@ -52,16 +52,42 @@ An example Answer
 }
 ```
 
-## Wireframes
-/ask
+```
+var Schema = mongoose.Schema;
 
-![ask](/documentation/ask.jpg)
+var User = new Schema({
+	// use plugin for authentication and password encryption, e.g. mongoose-encryption
+	// user id is created by mongoose by default
+	username: {type: String, required: true},
+	password: {type: String, required: true},
+	city: {type: String, required: true},
+	country: {type: String, required: true},
+	gender: {type: String, required: true},
+	birth_date: {type: Date, required: true},
+	bio: {type: String, required: false},
+	income: {type: String, required: true},
+	education_level: {type: String, required: true},
+	industry: {type: String, required: true},
+	marital_status: {type: String, required: true},
+	num_points: {type: Number, required: true},
+	questions_answered: [{type: Schema.Types.ObjectId, ref: 'Question'}],
+	questions_asked: [{type: Schema.Types.ObjectId, ref: 'Question'}]
+});
 
+var Question = new Schema({
+	text: {type: String, required: true},
+	answers: [{type: Schema.Types.ObjectId, ref: 'Answer'}],
+	category: {type: String, required: true},
+	asked_by: {type: Number, ref: 'User'},
+	answered_by: [{type: Schema.Types.ObjectId, ref: 'User'}]
+});
 
-/
-(index)
+var Answer = new Schema({
+	text: {type: String, required: true},
+	voters: [{type: Schema.Types.ObjectId, ref: 'User'}]
+});
 
-![/](/documentation/answer.jpg)
+```
 
 ## Site Map
 * Login --> Registration, Index
@@ -76,9 +102,4 @@ An example Answer
 5. As a user, I can pose questions to the site and use the resulting visualizations to inform or entertain myself and others.
 7. As a user, I can ask or answer silly questions just because I find them entertaining.
 
-## Research Topics
-1. (5 points) Authentication - I will implement authentication and session management using Passport. User sign-up and registration will be enabled by this authentication and database storage. Only logged in users will be able to vote, and only users who have voted will be able to view results.
-2. (5 points) Visualizations - I will use D3 to create visualizations that depict how different demographics have responded to polls. While I have some experience using D3, I want to use this project to experiment and challenge myself with new types of graphs that access the data generated from each poll then show that data in interesting and purposeful ways. I might incorporate higher-level libraries for D3 such as D3Plus.
-For a total of 10 points.
 
-## [Link to initial project file](/app.js)
