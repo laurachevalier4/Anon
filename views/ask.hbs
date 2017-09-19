@@ -19,13 +19,13 @@
 	<input type="text" name="choice1" placeholder="Choice 1">
 	<input type="text" name="choice2" placeholder="Choice 2">
 	<!-- Figure out how to dynamically add choices on click event -->
-	<button class="submit-button" id="add-choice">Add another choice.</button>
+	<button id="add-choice">Add another choice.</button>
 	<input type="submit" value="Send out to the masses.">
 </form>
 
 <script>
 	$(document).ready(function() {
-	    var max_fields      = 10; //maximum input boxes allowed
+	    var max_fields      = 6; //maximum input boxes allowed
 	    var wrapper         = $(".question-form"); //Fields wrapper
 	    var add_button      = $("#add-choice"); //Add button ID
 	    

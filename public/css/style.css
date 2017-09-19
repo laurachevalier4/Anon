@@ -131,7 +131,7 @@ hr {
 
 .question-form input[type="submit"], .question-form button {
   height: 3em;
-  width: 100%;
+  width: auto;
   outline: 0;
   color: white;
   border: none;
@@ -150,10 +150,12 @@ hr {
 .remove-field {
   color: #333;
   text-decoration: none;
+  position: relative;
+  top: -1em;
 }
 
 .remove-field:hover, .remove-field:active {
-  color: #777;
+  color: #933;
 }
 
 #question-label {
