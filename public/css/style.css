@@ -54,6 +54,7 @@ body {
   padding: .5em;
   font-family: 'Buda', cursive;
   font-size: 1em;
+  outline: none;
 }
 
 .submit-button:hover {

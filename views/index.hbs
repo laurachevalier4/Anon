@@ -59,11 +59,37 @@
 <script src="/js/jquery.min.js"></script>
 <script>
 
+var drawSVG = function(svg) {
+    $(svg).show();
+    var button = svg.parentNode.querySelector(".see-results");
+    button.innerText = "Hide Results";
+    button.removeEventListener("click", drawSVG);
+    button.addEventListener("click", hideSVG.bind(this, svg));
+    if (!svg.dataset.drawn) {
+      drawChart($(svg).attr('id'), {{prod}});
+      svg.setAttribute("data-drawn", true);
+    }
+}
+
+var hideSVG = function(svg) {
+    $(svg).hide();
+    var button = svg.parentNode.querySelector(".see-results");
+    button.innerText = "See Results";
+    button.addEventListener("click", drawSVG.bind(this, svg));
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
   var svgs = document.getElementsByTagName('svg'); 
   svgs = Array.prototype.slice.call(svgs);
   svgs.forEach(function(svg) {
-    drawChart($(svg).attr('id'), {{prod}});
+    $(svg).hide();
+    var b = document.createElement("button");
+    b.classList.add("see-results");
+    b.classList.add("submit-button");
+    b.innerText = "See Results";
+    b.addEventListener("click", drawSVG.bind(this, svg));
+    svg.parentNode.appendChild(b);
+    //drawChart($(svg).attr('id'), {{prod}});
   });
 
   $(window).scroll(function() {

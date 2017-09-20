@@ -10,7 +10,6 @@ TODO:
   // dashboard 
     // one page for questions asked
     // one for questions answered
-  // sort questions so that most recent appears at top
   // pagination / infinite scroll with loading as scrolling
   // IDEA: instead of using pie charts, use a tree/bubble chart or interactive pie chart where once you click on the answer you want to investigate, it gives you further breakdown of how the demographics are divided among people who chose that answer; do something else if you want to highlight how demographics are split across different answers rather than within the same... but similar idea
     // a tree where roots are answers -- each answer stems into categories: gender, education, etc. which you can click on to see the percentage of that demo who voted for that answer (but then you would have to click on multiple roots to compare across answers) https://bl.ocks.org/mbostock/4339083
@@ -18,9 +17,12 @@ TODO:
   // make chart text labels overflow onto new line if out of box
   // Make a tutorial for Anon where the question is the same asked for everyone when they first join and it is a good but not-too-serious representation of what kinds of questions should be asked
   // With every question, increment the number of points required to ask again, like leveling up a gag in Toontown. But have it reset after a few questions so it isn't terribly annoying.
+  // fix d3 problems where diagrams do not adjust after window scales
+  // IDEA: companies who pay can request trends from specific demographics for related topics
 
 DONE:
   // add ability to add another answer (more than 2...) but set limit (e.g. max 5 options)
+  // sort questions so that most recent appears at top
 */
 
 const express = require('express');

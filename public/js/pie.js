@@ -108,7 +108,7 @@ function drawChart(question_id, prod) {
               return d3.event.pageX - 20 + 'px';
             })
             .style('font-size', '1em')
-            .style('font-family', 'Old Standard TT, serif');
+            .style('font-family', 'Buda, cursive');
     }
 
     function onMouseout() {
